@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Source Files\protobuf">
+      <UniqueIdentifier>{289845ba-b857-4d5e-8562-a4d0a5917860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\protobuf">
+      <UniqueIdentifier>{91567bde-2cee-40b7-8c47-7f2dd5ef93c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TCP">
+      <UniqueIdentifier>{39590a90-ae91-49ae-848a-0a8ba0591003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TCP">
+      <UniqueIdentifier>{f7c7d12e-3e2c-4fe4-b601-4764704b408f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="线程池">
+      <UniqueIdentifier>{0c6ec2de-8bb2-4534-8940-7f1b4c225e4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\界面模块">
+      <UniqueIdentifier>{474fb381-99bb-421d-badd-bb652499b8ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\界面模块">
+      <UniqueIdentifier>{13028bec-2f03-4e89-84f4-7d469ee67275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomBtn">
+      <UniqueIdentifier>{2e91120e-c742-4864-bf52-11c382c8add8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="log">
+      <UniqueIdentifier>{8844a968-b578-49ba-9715-bef80a314cd5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="IPCTestDemo.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParsingCmd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IPCMessage.pb.cc">
+      <Filter>Source Files\protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="TCPClient.cpp">
+      <Filter>Source Files\TCP</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobleVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IPCTestDemo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BusinessLogic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prompt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="threadpool\ThreadPool.cpp">
+      <Filter>线程池</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleGui.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_combobox.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_doublespinbox.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_icon.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_label.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_lineedit.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_pageturn.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_progress.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_pushbutton.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_radiobutton.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_slider.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_spinbox.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpc_switch.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\CPCQDoubleSpinBox.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\cpiewidget.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomBtn\uibase.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="Login.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="AddTestItemDialog.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="projectlistwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Cpclog.cpp">
+      <Filter>log</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="load_dll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IPCMessage.pb.h">
+      <Filter>Header Files\protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPClient.h">
+      <Filter>Header Files\TCP</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobleVar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structdef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>线程池</Filter>
+    </ClInclude>
+    <ClInclude Include="threadpool\ThreadPool.h">
+      <Filter>线程池</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomBtn\cpc_pageturn.h">
+      <Filter>CustomBtn</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomBtn\uibase.h">
+      <Filter>CustomBtn</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cpclog.h">
+      <Filter>log</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IPCMessage.proto" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="IPCTestDemo.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ParsingCmd.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BusinessLogic.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="prompt.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_combobox.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_doublespinbox.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_icon.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_label.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_lineedit.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_progress.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_pushbutton.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_radiobutton.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_slider.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_spinbox.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpc_switch.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\CPCQDoubleSpinBox.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\cpiewidget.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\CustomRadioBtn.hpp">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\CustomRateLabel.hpp">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\CustomTextLabel.hpp">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomBtn\CustomUnitLabel.hpp">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="TitleGui.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="Login.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="AddTestItemDialog.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="projectlistwidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="IPCTestDemo.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="prompt.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="TitleGui.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Login.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddTestItemDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+</Project>

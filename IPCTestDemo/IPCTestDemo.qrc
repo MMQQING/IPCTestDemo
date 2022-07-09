@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/IPCTestDemo">
+        <file>Resources/fontawesome-webfont.ttf</file>
+        <file>Resources/logo.png</file>
+        <file>Resources/logo1.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<login>
+		<para account="A123" psw="123456" autolog="0" access="0"/>
+	</login>
+	<Comm>
+		<tcppara lip="172.17.3.220" rip="172.17.3.120" lport="4000" rport="3000"/>
+		<url ipcurl=""/>
+	</Comm>
+	<webPara>
+		<web hostport="http://172.16.6.20:8069"/>
+	</webPara>
+</root>
