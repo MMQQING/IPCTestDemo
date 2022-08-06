@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
 	<login>
-		<para account="A123" psw="123456" autolog="0" access="0"/>
+		<para account="wmssync" psw="wmssync" autolog="0" access="0" rescode="3FA01-F7-01"/>
 	</login>
 	<Comm>
-		<tcppara lip="172.17.3.220" rip="172.17.3.120" lport="4000" rport="3000"/>
+		<tcppara lip="192.168.11.22" rip="192.168.11.88" lport="4000" rport="10801"/>
 		<url ipcurl=""/>
 	</Comm>
 	<webPara>
-		<web hostport="http://172.16.6.20:8069"/>
+		<web hostport="http://124.221.240.243:20984"/>
 	</webPara>
 </root>

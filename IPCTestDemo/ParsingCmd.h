@@ -4,6 +4,9 @@
 #include "threadpool/ThreadPool.h"
 #include <QMap>
 #include <QObject>
+#include "Mesjob.h"
+#include <QVariant>
+#include <QMetaType>
 
 class GlobleVar;
 class ParsingCmd : public QObject
@@ -58,6 +61,8 @@ private:
 	std::string TS_GetOperatorsInfo();
 	//恢复出厂设置
 	std::string TS_SetDefault();
+	//设置时间
+	std::string TS_TimeWrite();
 	//退出厂测模式
 	std::string TS_SetTestMode();
 	//测试PTZ马达	（暂不添加）
@@ -117,13 +122,19 @@ signals:
 	void updateConn();			//TCP连接成功消息用于重连后发送命令
 	void tcpConn(bool b);       //登录前，TCP连接, 用于登录界面显示连接成功与否
 	void loginStatus(int istatus);
+	void mesloginStatus(bool istatus);//mes登录状态
 	///IPC结果返回GUI
 	//todo.....
 	void manTimeout(QString testname, int time);
-	void manResult(QString testname, QString result);
+	void manResult(QString testname, int result);
 	void autoTimeout(QString testname,int time);
-	void autoResult(QString testname, QString result);
+	void autoResult(QString testname, int result);
 
+	void myResult(QString testname, int result);
+
+	void message(QVariant, QString);
+public:
+	std::shared_ptr<Mesjob>						m_ptrMes;
 private:
 	std::shared_ptr<TCPClient>					m_tcpClient;
 	std::shared_ptr<GlobleVar>					m_ptrGloble;

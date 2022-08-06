@@ -27,6 +27,7 @@ void XmlClass::ReadParaXml()
 	ptr->m_stCommonInfo.strPsw = pt.get<std::string>("root.login.para.<xmlattr>.psw", "123456");
 	ptr->m_stCommonInfo.iAccess = pt.get<uint8_t>("root.login.para.<xmlattr>.access", 0);
 	ptr->m_stCommonInfo.iAutoLogin = pt.get<uint8_t>("root.login.para.<xmlattr>.autologin", 0);
+	ptr->m_stCommonInfo.iResCode = pt.get<std::string>("root.login.para.<xmlattr>.rescode", "123456");
 
 	ptr->m_stCommonInfo.strLocalIP = pt.get<std::string>("root.Comm.tcppara.<xmlattr>.lip", "192.168.1.51");
 	ptr->m_stCommonInfo.strRemoteIP = pt.get<std::string>("root.Comm.tcppara.<xmlattr>.rip", "192.168.1.51");
@@ -47,6 +48,7 @@ void XmlClass::WriteParaXml()
 	pt.put<std::string>("root.login.para.<xmlattr>.psw", ptr->m_stCommonInfo.strPsw);
 	pt.put<uint8_t>("root.login.para.<xmlattr>.autolog", ptr->m_stCommonInfo.iAutoLogin);
 	pt.put<uint8_t>("root.login.para.<xmlattr>.access", ptr->m_stCommonInfo.iAccess);
+	pt.put<std::string>("root.login.para.<xmlattr>.rescode", ptr->m_stCommonInfo.iResCode);
 
 	pt.put<std::string>("root.Comm.tcppara.<xmlattr>.lip", ptr->m_stCommonInfo.strLocalIP);
 	pt.put<std::string>("root.Comm.tcppara.<xmlattr>.rip", ptr->m_stCommonInfo.strRemoteIP);

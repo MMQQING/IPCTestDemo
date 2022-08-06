@@ -1,5 +1,7 @@
 #include "ParsingCmd.h"
 #include "GlobleVar.h"
+#include <time.h>
+#include <ctime> 
 
 ParsingCmd::ParsingCmd()
 {
@@ -15,6 +17,8 @@ ParsingCmd::~ParsingCmd()
 void ParsingCmd::init()
 {
 	m_ptrGloble = GlobleVar::GetInstance();
+	m_ptrMes = std::shared_ptr<Mesjob>(new Mesjob());
+	qRegisterMetaType<QMap<QString ,QString>>("QMap<QString ,QString>");
 }
 
 void ParsingCmd::tcpConnect()
@@ -26,10 +30,9 @@ void ParsingCmd::tcpConnect()
 
 void ParsingCmd::mesConnect()
 {
-	//todo......
-// 	if(连接成功){
-// 		emit loginStatus(true);
-// 	}
+	if(m_ptrMes->common_login()){
+		emit mesloginStatus(true);
+	}
 }
 
 void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
@@ -40,9 +43,10 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 		{
 		case CMD_DEVIINFO:		str = TS_GetDeviceInfo();			break;
 		case CMD_URL:			str = TS_GetURLInfo();				break;
-		case CMD_KEYREAD:		str = TS_SetOperatorsInfo();		break;
+		case CMD_KEYREAD:		str = TS_GetOperatorsInfo();		break;
 		case CMD_EXITTEST:		str = TS_SetTestMode();				break;
-		case CMD_KEYWRITE:		str = TS_GetOperatorsInfo();		break;
+		case CMD_SETTIME:		str = TS_TimeWrite();				break;
+		case CMD_KEYWRITE:		str = TS_SetOperatorsInfo();		break;
 		case CMD_SETDEFAULT:	str = TS_SetDefault();				break;
 		case CMD_WHITELIGHT:	str = TS_WhiteLight();				break;
 		case CMD_IRLIGHT:		str = TS_InfraredLamp();			break;
@@ -100,9 +104,11 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 
 void ParsingCmd::UnParsCmd(char* p, std::size_t& len, boost::asio::ip::tcp::endpoint& ep)
 {
-	p[len] = '\0';
-	std::string str = p;
+	//p[len] = '\0';
+	//std::string str = p;
+	std::string str(p, len);
 	IM::Apacket apacketinfo;
+	bool bl = apacketinfo.ParseFromString(str);
 	if (apacketinfo.ParseFromString(str)) {
 		switch (apacketinfo.msg().type())
 		{
@@ -194,7 +200,7 @@ std::string ParsingCmd::TS_GetURLInfo()
 	return str;
 }
 //读运营商信息
-std::string ParsingCmd::TS_SetOperatorsInfo()
+std::string ParsingCmd::TS_GetOperatorsInfo()
 {
 	uint32_t command = A_TEST;
 	std::string testname = "keyread";
@@ -226,7 +232,7 @@ std::string ParsingCmd::TS_SetTestMode()
 
 ///设置信息
 //写运营商信息
-std::string ParsingCmd::TS_GetOperatorsInfo()
+std::string ParsingCmd::TS_SetOperatorsInfo()
 {
 	uint32_t command = A_TEST;
 	std::string testname = "keywrite";
@@ -235,6 +241,34 @@ std::string ParsingCmd::TS_GetOperatorsInfo()
 	msg->set_command(command);
 	msg->set_testname(testname);
 	apacket.set_allocated_msg(msg);
+
+	IM::deviceinfo* data = new IM::deviceinfo();
+	data->set_num(6);
+	IM::info_s *value1 = data->add_value();
+	value1->set_name("sn");
+	value1->set_value(gVar->m_st40Info.SN);
+
+	IM::info_s *value2 = data->add_value();
+	value2->set_name("mac");
+	value2->set_value(gVar->m_st40Info.Mac);
+
+	IM::info_s *value3 = data->add_value();
+	value3->set_name("cmei");
+	value3->set_value(gVar->m_st40Info.CMEI);
+
+	IM::info_s *value4 = data->add_value();
+	value4->set_name("deviceserialnumber");
+	value4->set_value(gVar->m_st40Info.DeviceSerialNumber);
+
+	IM::info_s *value5 = data->add_value();
+	value5->set_name("devkey");
+	value5->set_value(gVar->m_st40Info.DevKey);
+
+	IM::info_s *value6 = data->add_value();
+	value6->set_name("userpass");
+	value6->set_value(gVar->m_st40Info.UserPass);
+
+	apacket.set_allocated_data(data);
 
 	std::string str;
 	apacket.SerializeToString(&str);
@@ -252,6 +286,30 @@ std::string ParsingCmd::TS_SetDefault()
 	apacket.set_allocated_msg(msg);
 
 	std::string str;
+	apacket.SerializeToString(&str);
+	return str;
+}
+//设置时间
+std::string ParsingCmd::TS_TimeWrite()
+{
+	uint32_t command = A_TEST;
+	std::string testname = "timewrite";
+	IM::Apacket apacket;
+	IM::Amessage *msg = new IM::Amessage();
+	msg->set_command(command);
+	msg->set_testname(testname);
+	apacket.set_allocated_msg(msg);
+
+	IM::deviceinfo* data = new IM::deviceinfo();
+	data->set_num(1);
+	IM::info_s *value1 = data->add_value();
+	value1->set_name("timestr");
+	time_t tt = time(NULL);//这句返回的只是一个时间戳
+	std::string str_time = "@" + std::to_string(tt);
+	value1->set_value(str_time);
+	apacket.set_allocated_data(data);
+// 
+ 	std::string str;
 	apacket.SerializeToString(&str);
 	return str;
 }
@@ -432,7 +490,7 @@ std::string ParsingCmd::RS_WhiteLight(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "whitelight";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -448,7 +506,7 @@ std::string ParsingCmd::RS_InfraredLamp(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "irlight";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -464,7 +522,7 @@ std::string ParsingCmd::RS_IRCUT(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "ircut";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -480,7 +538,7 @@ std::string ParsingCmd::RS_LEDLights(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "netled";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -496,7 +554,7 @@ std::string ParsingCmd::RS_Speaker(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "speakertest";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -512,7 +570,7 @@ std::string ParsingCmd::RS_MIC(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "mictest";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -528,7 +586,7 @@ std::string ParsingCmd::RS_InfraredVison(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "irnvtest";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -544,7 +602,7 @@ std::string ParsingCmd::RS_FullcolorVison(uint32_t value)
 {
 	uint32_t command = A_RESULT;
 	std::string testname = "fullcolornv";
-	std::string result = std::to_string(value);
+	uint32_t result = value;
 	IM::Apacket apacket;
 	IM::Amessage *msg = new IM::Amessage();
 	msg->set_command(command);
@@ -671,85 +729,82 @@ void ParsingCmd::Rec_AutoTest(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Devinfo(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QMap<std::string, std::string> _map;
+		QMap<QString, QString> _map;
 		if(apacketinfo.has_data()){
 			for (int i = 0; i < apacketinfo.data().num(); i++) {
-				_map.insert(apacketinfo.data().value(i).name(), apacketinfo.data().value(i).value());
+				_map.insert(QString::fromStdString(apacketinfo.data().value(i).name()), QString::fromStdString(apacketinfo.data().value(i).value()));
 			}
 		}
-		//todo... up to GUI
+		QVariant DataVar;
+		DataVar.setValue(_map);
+		emit message(DataVar, "devinfo");
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_Url(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QMap<std::string, std::string> _map;
+		QMap<QString, QString> _map;
 		if (apacketinfo.has_data()) {
 			for (int i = 0; i < apacketinfo.data().num(); i++) {
-				_map.insert(apacketinfo.data().value(i).name(), apacketinfo.data().value(i).value());
+				_map.insert(QString::fromStdString(apacketinfo.data().value(i).name()), QString::fromStdString(apacketinfo.data().value(i).value()));
 			}
 		}
-		//todo... up to GUI
+ 		QVariant DataVar;
+ 		DataVar.setValue(_map);
+ 		emit message(DataVar,"url");
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_Keyread(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QMap<std::string, std::string> _map;
+		QMap<QString, QString> _map;
 		if (apacketinfo.has_data()) {
 			for (int i = 0; i < apacketinfo.data().num(); i++) {
-				_map.insert(apacketinfo.data().value(i).name(), apacketinfo.data().value(i).value());
+				_map.insert(QString::fromStdString(apacketinfo.data().value(i).name()), QString::fromStdString(apacketinfo.data().value(i).value()));
 			}
 		}
-		//todo... up to GUI
+		QVariant DataVar;
+		DataVar.setValue(_map);
+		emit message(DataVar, "keyread");
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_Exittest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QMap<std::string, std::string> _map;
-		if (apacketinfo.has_data()) {
-			for (int i = 0; i < apacketinfo.data().num(); i++) {
-				_map.insert(apacketinfo.data().value(i).name(), apacketinfo.data().value(i).value());
-			}
-		}
-		//todo... up to GUI
+		uint32_t result = apacketinfo.msg().result();
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 //设置
 void ParsingCmd::IPC_RS_Keywrite(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QMap<std::string, std::string> _map;
-		if (apacketinfo.has_data()) {
-			for (int i = 0; i < apacketinfo.data().num(); i++) {
-				_map.insert(apacketinfo.data().value(i).name(), apacketinfo.data().value(i).value());
-			}
-		}
-		//todo... up to GUI
+		uint32_t result = apacketinfo.msg().result();
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_Setdefault(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		QString result = QString::fromStdString(apacketinfo.msg().result());
-		//todo... up to GUI
+		uint32_t result = apacketinfo.msg().result();
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 //手动测试
 void ParsingCmd::IPC_RS_Whitelight(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), QString::fromStdString(apacketinfo.msg().result()));
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
 			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
@@ -758,11 +813,11 @@ void ParsingCmd::IPC_RS_Whitelight(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Irlight(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -770,11 +825,11 @@ void ParsingCmd::IPC_RS_Irlight(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Ircut(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -782,11 +837,11 @@ void ParsingCmd::IPC_RS_Ircut(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Netled(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -794,11 +849,11 @@ void ParsingCmd::IPC_RS_Netled(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Speakertest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -806,11 +861,11 @@ void ParsingCmd::IPC_RS_Speakertest(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Mictest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -818,11 +873,11 @@ void ParsingCmd::IPC_RS_Mictest(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Irnvtest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -830,11 +885,11 @@ void ParsingCmd::IPC_RS_Irnvtest(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Fullcolornv(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != "") {
-			//todo..up result to GUI
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 		}
 		else {
-			//todo..up timeout to GUI
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 		}
 	}
 }
@@ -842,31 +897,29 @@ void ParsingCmd::IPC_RS_Fullcolornv(IM::Apacket apacketinfo)
 void ParsingCmd::IPC_RS_Keytest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		//todo..up timeout to GUI
 		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()),apacketinfo.msg().timeout());
 	}
 	else if(apacketinfo.msg().command() == A_RESULT){
-		//todo..up result to GUI
-		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), QString::fromStdString(apacketinfo.msg().result()));
+		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_TFtest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		//todo..up timeout to GUI
+		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 	}
 	else if (apacketinfo.msg().command() == A_RESULT) {
-		//todo..up result to GUI
+		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
 void ParsingCmd::IPC_RS_Ldrtest(IM::Apacket apacketinfo)
 {
 	if (apacketinfo.msg().command() == A_OKAY) {
-		//todo..up timeout to GUI
+		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 	}
 	else if (apacketinfo.msg().command() == A_RESULT) {
-		//todo..up result to GUI
+		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }

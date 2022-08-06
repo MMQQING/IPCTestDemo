@@ -37,6 +37,7 @@ enum eCtrlCmd
 	CMD_URL,				//获取直播播放地址
 	CMD_KEYREAD,			//读运营商信息
 	CMD_EXITTEST,			//退出厂测模式
+	CMD_SETTIME,			//设置时间
 	CMD_KEYWRITE,			//写运营商信息
 	CMD_SETDEFAULT,			//恢复出厂设置
 	CMD_WHITELIGHT,			//开关白光灯
@@ -54,7 +55,7 @@ enum eCtrlCmd
 };
 
 const std::string strTcpCmd[] = {
-	"获取设备信息","获取直播播放地址","读运营商信息","退出厂测模式","写运营商信息",
+	"获取设备信息","获取直播播放地址","读运营商信息","退出厂测模式","设置时间","写运营商信息",
 	"恢复出厂设置","开关白光灯","开关红外灯","开关IRCUT","开关网络LED","测试扬声器",
 	"测试麦克风","测试红外夜视","测试全彩夜视","测试Rest按键","测试TF卡","测试光敏"
 };
@@ -103,6 +104,7 @@ typedef struct st_common_info {
 	std::string     strUsername;                //用户名
 	std::string     strPsw;                     //密码
 	uint8_t         iAccess;                    //权限
+	std::string		iResCode;					//资源代码
 	std::string		strLocalIP;					//本地IP地址 0:tcp 1:udp
 	uint32_t		uLocalPort;					//本地端口 0:tcp 1:udp
 	uint32_t		uRemotePort;				//服务端端口 0:tcp 1:udp
@@ -133,7 +135,73 @@ typedef struct st_login_info {
 	uint16_t				dbport;
 	st_login_info() :dbIP("192.168.1.49"), dbuser("root"), dbpasswd("Aa123456"), dbname("db_hys"), dbport(3306) {}
 }st_login_info, *pst_login_info;
+//登录mes回复信息
+typedef struct st_login_result {
+	std::string				UserId;//用户ID
+	std::string				UserCode;//用户代码
+	std::string				UserName;//用户名称
+	std::string				ResId;//资源ID
+	std::string				ResCode;//资源代码
+	std::string				ResName;//资源名称
+	std::string				LineId;//线别ID
+	std::string				LineCode;//线别代码
+	std::string				LineName;//线别名称
+	std::string				ShiftTypeId;//班制ID
+	std::string				ShiftTypeCode;//班制代码
+	std::string				ShiftTypeName;//班制名称
+	std::string				OPId;//工序Id
+	std::string				OPCode;//工序代码
+	std::string				OPName;//工序名称
+	std::string				ReturnValue;//执行结果  0：表示执行失败   1：表示执行成功
+	std::string				ReturnMessage;//执行成功或失败时的返回信息
+}st_login_result, *pst_login_result;
+//mes20接口回复信息
+typedef struct st_20_result {
+	std::string				LotId;//批次条码ID
+	std::string				MOId;//批次条码对应的工单Id
+	std::string				MOCode;//批次条码对应的工单编号
+	std::string				ReturnValue;//执行结果  0：表示执行失败   1：表示执行成功
+	std::string				ReturnMessage;//执行成功或失败时的返回信息
+}st_20_result, *pst_20_result;
+//mes40接口回复信息
+typedef struct st_40_result {
+	std::string				WholeDeviceCode;//WholeDeviceCode
+	std::string				IMEI;//主IMEI
+	std::string				SubIMEI;//副IMEI
+	std::string				Mac;//Mac
+	std::string				MacStart;//MacStart
+	std::string				MacEnd;//MacEnd
+	std::string				DeviceSerialNumber;//DeviceSerialNumber
+	std::string				LanIP;//LanIP
+	std::string				DeviceSerialNumberPrint;//DeviceSerialNumberPrint
+	std::string				CISN;//CISN
+	std::string				OUI;//OUI
+	std::string				GponSN;//GponSN
+	std::string				DSN;//DSN
+	std::string				UserName;//UserName
+	std::string				UserPass;//UserPass
+	std::string				WirelessNetName;//WirelessNetName
+	std::string				WlanPass;//WlanPass
+	std::string				WirelessNetName2;//WirelessNetName2
+	std::string				WlanPass2;//WlanPass2
+	std::string				WirelessNetName3;//WirelessNetName3
+	std::string				WlanPass3;//WlanPass3
+	std::string				WirelessNetName4;//WirelessNetName4
+	std::string				WlanPass4;//WlanPass4
+	std::string				TR069UserName;//TR069UserName
+	std::string				PPPOEPassWord;//PPPOEPassWord
+	std::string				OrderNoAllocation;//OrderNoAllocation
+	std::string				STBNO;//STBNO
+	std::string				MFRS;//MFRS
+	std::string				SN;//SN
+	std::string				CMEI;//CMEI
+	std::string				QRCode;//QRCode
+	std::string				DevKey;//DevKey
+	std::string				AreaCode;//地区码
+	std::string				ReturnValue;//执行结果  0：表示执行失败   1：表示执行成功
+	std::string				ReturnMessage;//执行成功或失败时的返回信息
 
+}st_40_result, *pst_40_result;
 struct amessage {
 	unsigned int command;      /* command identifier constant   */
 	unsigned char testname[16];  /* usbtest/tftest/mictest....    */

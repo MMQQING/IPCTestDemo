@@ -21,7 +21,10 @@ public:
 private:
 	void initFont();
 	void init();
+	void bindSinalSlot();
 	void moveCurrentItem(QListWidget *source, QListWidget *target);
+signals:
+	void vector_test(QVector<QString> vec);
 public slots:
 // 	void AToB_clicked();
 // 	void BToA_clicked();

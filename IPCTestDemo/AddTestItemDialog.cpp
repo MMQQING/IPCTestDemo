@@ -7,6 +7,7 @@ AddTestItemDialog::AddTestItemDialog(QWidget *parent)
 	ui->setupUi(this);
 	initFont();
 	init();
+	bindSinalSlot();
 }
 
 AddTestItemDialog::~AddTestItemDialog()
@@ -22,6 +23,7 @@ void AddTestItemDialog::initFont()
 
 void AddTestItemDialog::init()
 {
+	_mainWindow = std::make_shared<IPCTestDemo>();
 	//设置主界面标题栏自绘
 	setWindowFlags(Qt::FramelessWindowHint | Qt::Window | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
 	listA = new ProjectListWidget;
@@ -32,13 +34,13 @@ void AddTestItemDialog::init()
 	buttonDown = new QPushButton();
 	buttonOk = new QPushButton();
 
-	listA->addItem(QString::fromLocal8Bit("写运营商信息"));
-	listA->addItem(QString::fromLocal8Bit("恢复出厂设置"));
+	//listA->addItem(QString::fromLocal8Bit("写运营商信息"));
 	listA->addItem(QString::fromLocal8Bit("开关白光灯"));
 	listA->addItem(QString::fromLocal8Bit("开关红外灯"));
-	listA->addItem(QString::fromLocal8Bit("开光IRCUT"));
-	listA->addItem(QString::fromLocal8Bit("开光网络LED灯"));
+	listA->addItem(QString::fromLocal8Bit("开关IRCUT"));
+	listA->addItem(QString::fromLocal8Bit("开关网络LED灯"));
 	listA->addItem(QString::fromLocal8Bit("测试扬声器"));
+	//listA->addItem(QString::fromLocal8Bit("恢复出厂设置"));
 
 	listB->addItem(QString::fromLocal8Bit("测试麦克风"));
 	listB->addItem(QString::fromLocal8Bit("测试红外夜视"));
@@ -70,12 +72,17 @@ void AddTestItemDialog::init()
 	setLayout(hboxLayout);
 
 	setFixedHeight(sizeHint().height());
+}
 
-// 	bool bl = connect(buttonAToB, SIGNAL(clicked()), this, SLOT(AToB_clicked()));
+void AddTestItemDialog::bindSinalSlot()
+{
+	// 	bool bl = connect(buttonAToB, SIGNAL(clicked()), this, SLOT(AToB_clicked()));
 // 	connect(buttonBToA, SIGNAL(clicked()), this, SLOT(BToA_clicked()));
 	bool bl = connect(buttonUp, SIGNAL(clicked()), this, SLOT(Up_clicked()));
-	connect(buttonDown, SIGNAL(clicked()), this, SLOT(Down_clicked()));
-	connect(buttonOk, SIGNAL(clicked()), this, SLOT(Set_clicked()));
+	bl = connect(buttonDown, SIGNAL(clicked()), this, SLOT(Down_clicked()));
+	bl = connect(buttonOk, SIGNAL(clicked()), this, SLOT(Set_clicked()));
+	bl = connect(this, SIGNAL(vector_test(QVector<QString>)), _mainWindow.get(), SLOT(initTestItems(QVector<QString>)));
+	int mm = 0;
 }
 
 // void AddTestItemDialog::AToB_clicked()
@@ -146,4 +153,5 @@ void AddTestItemDialog::Set_clicked()
 	_mainWindow->show();
 	_mainWindow->raise();
 	//todo. ..发送vector给下个界面
+	emit vector_test(vector);
 }

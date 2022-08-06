@@ -55,8 +55,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <LibraryPath>$(ProjectDir)lib\debug;$(BOOST_1_70_0)\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(BOOST_1_70_0)\include;$(ProjectDir)include;$(ProjectDir)CustomBtn;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)lib\debug;$(BOOST_1_70_0)\lib;$(ProjectDir)ffpeg\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(BOOST_1_70_0)\include;$(ProjectDir)include;$(ProjectDir)CustomBtn;$(ProjectDir)ffmpeg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <LibraryPath>$(ProjectDir)lib\release;$(LibraryPath)</LibraryPath>
@@ -95,6 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AddTestItemDialog.cpp" />
+    <ClCompile Include="autoprompt.cpp" />
     <ClCompile Include="BusinessLogic.cpp" />
     <ClCompile Include="Cpclog.cpp" />
     <ClCompile Include="Login.cpp" />
@@ -116,9 +117,12 @@
     <ClCompile Include="GlobleVar.cpp" />
     <ClCompile Include="IPCMessage.pb.cc" />
     <ClCompile Include="IPCTestDemo.cpp" />
+    <ClCompile Include="Mesjob.cpp" />
+    <ClCompile Include="MyFFmpeg.cpp" />
     <ClCompile Include="ParsingCmd.cpp" />
     <ClCompile Include="projectlistwidget.cpp" />
     <ClCompile Include="prompt.cpp" />
+    <ClCompile Include="RTSP_Player.cpp" />
     <ClCompile Include="TCPClient.cpp" />
     <ClCompile Include="threadpool\ThreadPool.cpp" />
     <ClCompile Include="TitleGui.cpp" />
@@ -130,7 +134,12 @@
     <None Include="IPCMessage.proto" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="autoprompt.h" />
     <ClInclude Include="Cpclog.h" />
+    <QtMoc Include="Mesjob.h" />
+    <QtMoc Include="MyFFmpeg.h" />
+    <ClInclude Include="MyHelper.h" />
+    <QtMoc Include="RTSP_Player.h" />
     <ClInclude Include="XmlClass.h" />
     <QtMoc Include="TitleGui.h" />
     <QtMoc Include="CustomBtn\cpc_combobox.h" />
@@ -169,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="AddTestItemDialog.ui" />
+    <QtUic Include="autoprompt.ui" />
     <QtUic Include="Login.ui" />
     <QtUic Include="IPCTestDemo.ui" />
     <QtUic Include="prompt.ui" />

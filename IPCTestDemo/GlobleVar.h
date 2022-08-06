@@ -51,5 +51,8 @@ class ParsingCmd;
 	 st_common_info						m_stCommonInfo;                 //通用信息
 	 uint8_t                            m_iLogin;                       //是否登录成功
 	 QString                            m_strXmlCfgPath;                //即时配置文件路径
+	 st_login_result					m_stLoginInfo;					//登录回复信息
+	 st_20_result						m_st20Info;						//mes20接口回复信息
+	 st_40_result						m_st40Info;						//mes40接口回复信息
  };
 #define  gVar GlobleVar::GetInstance()

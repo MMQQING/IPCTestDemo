@@ -3,6 +3,7 @@
 #include "GlobleVar.h"
 #include <QMessageBox>
 #include <QtNetwork>
+#include "Mesjob.h"
 
 Login::Login(QWidget *parent)
 	: QWidget(parent)
@@ -17,6 +18,7 @@ Login::~Login()
 
 void Login::Init()
 {
+	ui.objadvcfg->setEnabled(false);
 	setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 	setFixedSize(this->width(), this->height());	
 	CpcLogs::init_log((severity_levels)7, (severity_levels)7);
@@ -37,10 +39,10 @@ void Login::Init()
 	std::shared_ptr<GlobleVar> gInstance = GlobleVar::GetInstance();
  	m_ptrCmd = std::shared_ptr<ParsingCmd>(new ParsingCmd());
  	gInstance->setCmdObject(m_ptrCmd);
- 	gInstance->m_stCommonInfo.strconnect = "与服务端未连接";
+ 	gInstance->m_stCommonInfo.strconnect = "与Mes未连接";
 	bindSignalSlot();
-//	if (gInstance->m_stCommonInfo.iAutoLogin)
-//		slot_login();
+	if (gInstance->m_stCommonInfo.iAutoLogin)
+		slot_login();
 }
 
 void Login::initStyle()
@@ -48,7 +50,7 @@ void Login::initStyle()
 	QFile styleFile(":/Portable/Resources/style.qss");
 	if (!styleFile.open(QIODevice::ReadOnly))
 	{
-		CPCLOG_WARNING << "open style file error, style file path:" + styleFile.fileName().toStdString();
+		//CPCLOG_WARNING << "open style file error, style file path:" + styleFile.fileName().toStdString();
 		return;
 	}
 	this->setStyleSheet(styleFile.readAll());
@@ -61,6 +63,7 @@ void Login::InitPara()
 	//更新界面
 	ui.objaccount->setText(QString::fromStdString(ptr->m_stCommonInfo.strUsername));
 	ui.objpsw->setText(QString::fromStdString(ptr->m_stCommonInfo.strPsw));
+	ui.objrescode->setText(QString::fromStdString(ptr->m_stCommonInfo.iResCode));
 	ui.objautologin->setChecked(ptr->m_stCommonInfo.iAutoLogin);
 	ui.objServerip->setText(QString::fromStdString(ptr->m_stCommonInfo.strRemoteIP));
 	ui.objlocalip->setCurrentText(QString::fromStdString(ptr->m_stCommonInfo.strLocalIP));
@@ -74,8 +77,8 @@ void Login::bindSignalSlot()
 	bl = connect(ui.objlocalip, SIGNAL(clicked()), this, SLOT(slot_updateLIP()));
 	bl = connect(ui.objautologin, SIGNAL(toggled(bool)), this, SLOT(slot_autoLogin(bool)));
 	bl = connect(ui.objtest, SIGNAL(clicked()), this, SLOT(slot_test()));
-	bl = connect(m_ptrCmd.get(), SIGNAL(tcpConn(bool)), this, SLOT(slot_tcpConn(bool)));
-	bl = connect(m_ptrCmd.get(), SIGNAL(loginStatus(int)), this, SLOT(slot_loginStatus(int)));
+	bl = connect(m_ptrCmd.get()->m_ptrMes.get(), SIGNAL(mesConn(bool, QString)), this, SLOT(slot_mesConn(bool, QString)));
+	bl = connect(m_ptrCmd.get(), SIGNAL(mesloginStatus(bool)), this, SLOT(slot_loginStatus(bool)));
 }
 
 void Login::getLocalIP()
@@ -150,11 +153,11 @@ void Login::slot_test()
 	ptrCmd->mesConnect();
 
 	//测试使用
-	this->hide();
-	if (nullptr == m_xb)
-		m_xb = std::make_shared<AddTestItemDialog>();
-	m_xb->show();
-	m_xb->raise();
+// 	this->hide();
+// 	if (nullptr == m_xb)
+// 		m_xb = std::make_shared<AddTestItemDialog>();
+// 	m_xb->show();
+// 	m_xb->raise();
 	return;
 }
 
@@ -169,11 +172,11 @@ void Login::slot_updateLIP()
 	getLocalIP();
 }
 
-void Login::slot_tcpConn(bool b)
+void Login::slot_mesConn(bool b, QString str)
 {
 	if (b)
 	{
-		ui.objLoginStatus->setText(QStringLiteral("连接成功，请<登录>..."));
+		ui.objLoginStatus->setText(str);
 		ui.objLoginStatus->setStyleSheet("background-color:#64A600;");
 		m_bMesConn = true;
 		GlobleVar::GetInstance()->savepara(GlobleVar::GetInstance()->m_strXmlCfgPath.toStdString());
@@ -182,15 +185,15 @@ void Login::slot_tcpConn(bool b)
 	}
 	else
 	{
-		ui.objLoginStatus->setText(QStringLiteral("连接失败，请修改Url后重连..."));
+		ui.objLoginStatus->setText(str);
 		ui.objLoginStatus->setStyleSheet("background-color:#A23400;");
 		m_bMesConn = false;
 	}
 }
 
-void Login::slot_loginStatus(int iStatus)
+void Login::slot_loginStatus(bool iStatus)
 {
-	if (E_Login_OK == (eLoginState)iStatus)
+	if (iStatus)
 	{
 		this->hide();
 		if(nullptr == m_xb)

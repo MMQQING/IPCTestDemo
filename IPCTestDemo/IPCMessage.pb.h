@@ -191,9 +191,9 @@ class Amessage final :
   enum : int {
     kTestnameFieldNumber = 2,
     kVersionFieldNumber = 3,
-    kResultFieldNumber = 5,
     kCommandFieldNumber = 1,
     kTypeFieldNumber = 4,
+    kResultFieldNumber = 5,
     kTimeoutFieldNumber = 6,
     kIdFieldNumber = 7,
     kDataLengthFieldNumber = 8,
@@ -229,20 +229,6 @@ class Amessage final :
   std::string* _internal_mutable_version();
   public:
 
-  // string result = 5;
-  void clear_result();
-  const std::string& result() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_result(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_result();
-  PROTOBUF_NODISCARD std::string* release_result();
-  void set_allocated_result(std::string* result);
-  private:
-  const std::string& _internal_result() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_result(const std::string& value);
-  std::string* _internal_mutable_result();
-  public:
-
   // uint32 command = 1;
   void clear_command();
   uint32_t command() const;
@@ -259,6 +245,15 @@ class Amessage final :
   private:
   uint32_t _internal_type() const;
   void _internal_set_type(uint32_t value);
+  public:
+
+  // uint32 result = 5;
+  void clear_result();
+  uint32_t result() const;
+  void set_result(uint32_t value);
+  private:
+  uint32_t _internal_result() const;
+  void _internal_set_result(uint32_t value);
   public:
 
   // uint32 timeout = 6;
@@ -325,9 +320,9 @@ class Amessage final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr testname_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr version_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
     uint32_t command_;
     uint32_t type_;
+    uint32_t result_;
     uint32_t timeout_;
     uint32_t id_;
     uint32_t data_length_;
@@ -1004,54 +999,24 @@ inline void Amessage::set_type(uint32_t value) {
   // @@protoc_insertion_point(field_set:IM.Amessage.type)
 }
 
-// string result = 5;
+// uint32 result = 5;
 inline void Amessage::clear_result() {
-  _impl_.result_.ClearToEmpty();
+  _impl_.result_ = 0u;
 }
-inline const std::string& Amessage::result() const {
+inline uint32_t Amessage::_internal_result() const {
+  return _impl_.result_;
+}
+inline uint32_t Amessage::result() const {
   // @@protoc_insertion_point(field_get:IM.Amessage.result)
   return _internal_result();
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void Amessage::set_result(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.result_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+inline void Amessage::_internal_set_result(uint32_t value) {
+  
+  _impl_.result_ = value;
+}
+inline void Amessage::set_result(uint32_t value) {
+  _internal_set_result(value);
   // @@protoc_insertion_point(field_set:IM.Amessage.result)
-}
-inline std::string* Amessage::mutable_result() {
-  std::string* _s = _internal_mutable_result();
-  // @@protoc_insertion_point(field_mutable:IM.Amessage.result)
-  return _s;
-}
-inline const std::string& Amessage::_internal_result() const {
-  return _impl_.result_.Get();
-}
-inline void Amessage::_internal_set_result(const std::string& value) {
-  
-  _impl_.result_.Set(value, GetArenaForAllocation());
-}
-inline std::string* Amessage::_internal_mutable_result() {
-  
-  return _impl_.result_.Mutable(GetArenaForAllocation());
-}
-inline std::string* Amessage::release_result() {
-  // @@protoc_insertion_point(field_release:IM.Amessage.result)
-  return _impl_.result_.Release();
-}
-inline void Amessage::set_allocated_result(std::string* result) {
-  if (result != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.result_.SetAllocated(result, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.result_.IsDefault()) {
-    _impl_.result_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:IM.Amessage.result)
 }
 
 // uint32 timeout = 6;

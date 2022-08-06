@@ -83,13 +83,6 @@
    </item>
    <item row="6" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="0">
-      <widget class="cpc_label" name="label">
-       <property name="text">
-        <string>账号：</string>
-       </property>
-      </widget>
-     </item>
      <item row="3" column="0">
       <widget class="cpc_label" name="label_2">
        <property name="text">
@@ -97,17 +90,10 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="cpc_lineedit" name="objpsw">
+     <item row="2" column="0">
+      <widget class="cpc_label" name="label">
        <property name="text">
-        <string>cpc123</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QCheckBox" name="objautologin">
-       <property name="text">
-        <string>自动登录</string>
+        <string>账号：</string>
        </property>
       </widget>
      </item>
@@ -118,6 +104,30 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="cpc_lineedit" name="objpsw">
+       <property name="text">
+        <string>cpc123</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="cpc_label" name="label_4">
+       <property name="text">
+        <string>资源代码：</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="cpc_lineedit" name="objrescode"/>
+     </item>
+     <item row="4" column="2">
+      <widget class="QCheckBox" name="objautologin">
+       <property name="text">
+        <string>自动登录</string>
        </property>
       </widget>
      </item>

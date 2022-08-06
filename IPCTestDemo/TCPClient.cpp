@@ -22,7 +22,7 @@ void TCPClient::connect()
 
 void TCPClient::disConnect()
 {
-	m_ptrTcpObject->disconnect();
+	//m_ptrTcpObject->disconnect();
 }
 
 void TCPClient::send_cmd(char* pData, int len)

@@ -12,6 +12,8 @@ public:
 	prompt(QWidget *parent = nullptr);
 	~prompt();
 	void init();
+	void setPCMD(ParsingCmd* cmd);
+	void setTitle(QString);
 private:
 	void bindSinalSlot();
 private slots:
@@ -21,6 +23,6 @@ private slots:
 	void slots_timer_out(QString testname, int time);
 private:
 	Ui::prompt					ui;
-	ParsingCmd					_ParCMD;
+	ParsingCmd*					_ParCMD;
 	QString						_TestName;
 };

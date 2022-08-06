@@ -18,6 +18,16 @@ void prompt::init()
 	bindSinalSlot();
 }
 
+void prompt::setPCMD(ParsingCmd* cmd)
+{
+	_ParCMD = cmd;
+}
+
+void prompt::setTitle(QString str)
+{
+	ui.label->setText(str);
+}
+
 void prompt::bindSinalSlot()
 {
 	bool bl = connect(ui.PassButton, SIGNAL(clicked()), this, SLOT(slots_pass_button()));
@@ -30,7 +40,7 @@ void prompt::slots_pass_button()
 		this->hide();
 	}
 	//todo...Í¨¹ýGUI
-	_ParCMD.ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_Pass);
+	_ParCMD->ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_Pass);
 }
 
 void prompt::slots_false_button()
@@ -39,7 +49,7 @@ void prompt::slots_false_button()
 		this->hide();
 	}
 	//todo...Ê§°ÜGUI
-	_ParCMD.ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_False);
+	_ParCMD->ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_False);
 }
 
 void prompt::slots_close_window()
@@ -48,11 +58,11 @@ void prompt::slots_close_window()
 		this->hide();
 	}
 	//todo.. ³¬Ê±GUI
-	_ParCMD.ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_Timeout);
+	_ParCMD->ParsCmd(gVar->comparTestname(_TestName), A_RESULT, Result_Timeout);
 }
 
 void prompt::slots_timer_out(QString testname, int time)
 {
 	_TestName = testname;
-	QTimer::singleShot(time, this, SLOT(slots_close_window()));
+	//QTimer::singleShot(time, this, SLOT(slots_close_window()));
 }

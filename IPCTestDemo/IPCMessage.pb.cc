@@ -25,9 +25,9 @@ PROTOBUF_CONSTEXPR Amessage::Amessage(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.testname_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.version_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
-  , /*decltype(_impl_.result_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.command_)*/0u
   , /*decltype(_impl_.type_)*/0u
+  , /*decltype(_impl_.result_)*/0u
   , /*decltype(_impl_.timeout_)*/0u
   , /*decltype(_impl_.id_)*/0u
   , /*decltype(_impl_.data_length_)*/0u
@@ -151,7 +151,7 @@ static const ::_pb::Message* const file_default_instances[] = {
 const char descriptor_table_protodef_IPCMessage_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\020IPCMessage.proto\022\002IM\"\307\001\n\010Amessage\022\017\n\007c"
   "ommand\030\001 \001(\r\022\020\n\010testname\030\002 \001(\t\022\017\n\007versio"
-  "n\030\003 \001(\t\022\014\n\004type\030\004 \001(\r\022\016\n\006result\030\005 \001(\t\022\017\n"
+  "n\030\003 \001(\t\022\014\n\004type\030\004 \001(\r\022\016\n\006result\030\005 \001(\r\022\017\n"
   "\007timeout\030\006 \001(\r\022\n\n\002id\030\007 \001(\r\022\023\n\013data_lengt"
   "h\030\010 \001(\r\022\022\n\ndata_check\030\t \001(\r\022\020\n\010reserved\030"
   "\n \001(\r\022\021\n\tmsg_check\030\013 \001(\r\"%\n\006info_s\022\014\n\004na"
@@ -195,9 +195,9 @@ Amessage::Amessage(const Amessage& from)
   new (&_impl_) Impl_{
       decltype(_impl_.testname_){}
     , decltype(_impl_.version_){}
-    , decltype(_impl_.result_){}
     , decltype(_impl_.command_){}
     , decltype(_impl_.type_){}
+    , decltype(_impl_.result_){}
     , decltype(_impl_.timeout_){}
     , decltype(_impl_.id_){}
     , decltype(_impl_.data_length_){}
@@ -223,14 +223,6 @@ Amessage::Amessage(const Amessage& from)
     _this->_impl_.version_.Set(from._internal_version(), 
       _this->GetArenaForAllocation());
   }
-  _impl_.result_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.result_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (!from._internal_result().empty()) {
-    _this->_impl_.result_.Set(from._internal_result(), 
-      _this->GetArenaForAllocation());
-  }
   ::memcpy(&_impl_.command_, &from._impl_.command_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.msg_check_) -
     reinterpret_cast<char*>(&_impl_.command_)) + sizeof(_impl_.msg_check_));
@@ -244,9 +236,9 @@ inline void Amessage::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.testname_){}
     , decltype(_impl_.version_){}
-    , decltype(_impl_.result_){}
     , decltype(_impl_.command_){0u}
     , decltype(_impl_.type_){0u}
+    , decltype(_impl_.result_){0u}
     , decltype(_impl_.timeout_){0u}
     , decltype(_impl_.id_){0u}
     , decltype(_impl_.data_length_){0u}
@@ -263,10 +255,6 @@ inline void Amessage::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.version_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  _impl_.result_.InitDefault();
-  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-    _impl_.result_.Set("", GetArenaForAllocation());
-  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 Amessage::~Amessage() {
@@ -282,7 +270,6 @@ inline void Amessage::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.testname_.Destroy();
   _impl_.version_.Destroy();
-  _impl_.result_.Destroy();
 }
 
 void Amessage::SetCachedSize(int size) const {
@@ -297,7 +284,6 @@ void Amessage::Clear() {
 
   _impl_.testname_.ClearToEmpty();
   _impl_.version_.ClearToEmpty();
-  _impl_.result_.ClearToEmpty();
   ::memset(&_impl_.command_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.msg_check_) -
       reinterpret_cast<char*>(&_impl_.command_)) + sizeof(_impl_.msg_check_));
@@ -346,13 +332,11 @@ const char* Amessage::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
         } else
           goto handle_unusual;
         continue;
-      // string result = 5;
+      // uint32 result = 5;
       case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
-          auto str = _internal_mutable_result();
-          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.result_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
-          CHK_(::_pbi::VerifyUTF8(str, "IM.Amessage.result"));
         } else
           goto handle_unusual;
         continue;
@@ -465,14 +449,10 @@ uint8_t* Amessage::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt32ToArray(4, this->_internal_type(), target);
   }
 
-  // string result = 5;
-  if (!this->_internal_result().empty()) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      this->_internal_result().data(), static_cast<int>(this->_internal_result().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "IM.Amessage.result");
-    target = stream->WriteStringMaybeAliased(
-        5, this->_internal_result(), target);
+  // uint32 result = 5;
+  if (this->_internal_result() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt32ToArray(5, this->_internal_result(), target);
   }
 
   // uint32 timeout = 6;
@@ -541,13 +521,6 @@ size_t Amessage::ByteSizeLong() const {
         this->_internal_version());
   }
 
-  // string result = 5;
-  if (!this->_internal_result().empty()) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_result());
-  }
-
   // uint32 command = 1;
   if (this->_internal_command() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_command());
@@ -556,6 +529,11 @@ size_t Amessage::ByteSizeLong() const {
   // uint32 type = 4;
   if (this->_internal_type() != 0) {
     total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_type());
+  }
+
+  // uint32 result = 5;
+  if (this->_internal_result() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(this->_internal_result());
   }
 
   // uint32 timeout = 6;
@@ -612,14 +590,14 @@ void Amessage::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   if (!from._internal_version().empty()) {
     _this->_internal_set_version(from._internal_version());
   }
-  if (!from._internal_result().empty()) {
-    _this->_internal_set_result(from._internal_result());
-  }
   if (from._internal_command() != 0) {
     _this->_internal_set_command(from._internal_command());
   }
   if (from._internal_type() != 0) {
     _this->_internal_set_type(from._internal_type());
+  }
+  if (from._internal_result() != 0) {
+    _this->_internal_set_result(from._internal_result());
   }
   if (from._internal_timeout() != 0) {
     _this->_internal_set_timeout(from._internal_timeout());
@@ -665,10 +643,6 @@ void Amessage::InternalSwap(Amessage* other) {
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.version_, lhs_arena,
       &other->_impl_.version_, rhs_arena
-  );
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
-      &_impl_.result_, lhs_arena,
-      &other->_impl_.result_, rhs_arena
   );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Amessage, _impl_.msg_check_)

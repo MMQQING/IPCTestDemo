@@ -76,9 +76,6 @@
     <ClCompile Include="BusinessLogic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="prompt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="threadpool\ThreadPool.cpp">
       <Filter>线程池</Filter>
     </ClCompile>
@@ -145,6 +142,21 @@
     <ClCompile Include="Cpclog.cpp">
       <Filter>log</Filter>
     </ClCompile>
+    <ClCompile Include="Mesjob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFFmpeg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RTSP_Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="autoprompt.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="prompt.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="load_dll.h">
@@ -180,6 +192,9 @@
     <ClInclude Include="Cpclog.h">
       <Filter>log</Filter>
     </ClInclude>
+    <ClInclude Include="MyHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="IPCMessage.proto" />
@@ -192,9 +207,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="BusinessLogic.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="prompt.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="CustomBtn\cpc_combobox.h">
@@ -260,6 +272,21 @@
     <QtMoc Include="projectlistwidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Mesjob.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MyFFmpeg.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="RTSP_Player.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="autoprompt.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="prompt.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="IPCTestDemo.ui">
@@ -275,6 +302,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddTestItemDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="autoprompt.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

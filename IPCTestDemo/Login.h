@@ -37,6 +37,6 @@ private slots:
 	void slot_updateLIP();
 
 public slots:
-	void slot_tcpConn(bool b);
-	void slot_loginStatus(int iStatus);
+	void slot_mesConn(bool b,QString str);
+	void slot_loginStatus(bool iStatus);
 };
