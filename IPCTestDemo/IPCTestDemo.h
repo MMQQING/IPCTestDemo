@@ -66,17 +66,17 @@ signals:
 private:
 	Ui::IPCTestDemo*				ui;
 	ParsingCmd						_ParCmd;
-	BusinessLogic					_Business;
+	BusinessLogic*					_Business;
 	std::shared_ptr<Mesjob>			_Mesjob;
 
-	QString      m_playUrl;
-	MyFFmpeg    *m_ffmpeg = nullptr;
-	RTSP_Player *m_player = nullptr;
-	QImage       m_image;
-	QThread     *m_playThread = nullptr;
-	bool		IsConnectIPC;
-	QMap<QString, QLabel*> _map;
-	QMap<QString, QString> _mapResult;
-	QList<QString> _testlist;
-	QVector<QString> _testvec;
+	QString					m_playUrl;
+	MyFFmpeg*				m_ffmpeg = nullptr;
+	RTSP_Player*			m_player = nullptr;
+	QImage					m_image;
+	QThread*				m_playThread = nullptr;
+	bool					IsConnectIPC;
+	QMap<QString, QLabel*>	_map;
+	QMap<QString, QString>	_mapResult;
+	QList<QString>			_testlist;
+	QVector<QString>		_testvec;
 };

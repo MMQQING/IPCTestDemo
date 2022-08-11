@@ -115,7 +115,7 @@ int MyFFmpeg::MyFFmpegInit()
 	}
 
 	// 配置编码器上下文的参数
-	m_AVCodecContext->bit_rate = 0;         //码率
+	m_AVCodecContext->bit_rate = 50;         //码率
 	m_AVCodecContext->time_base.den = 30;   // 下面2行设置帧率，每秒/30帧
 	m_AVCodecContext->time_base.num = 1;
 	m_AVCodecContext->frame_number = 1;     //每包一个视频帧

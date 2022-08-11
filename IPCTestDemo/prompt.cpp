@@ -25,7 +25,7 @@ void prompt::setPCMD(ParsingCmd* cmd)
 
 void prompt::setTitle(QString str)
 {
-	ui.label->setText(str);
+	ui.label->setText(gVar->TestProjectName(str));
 }
 
 void prompt::bindSinalSlot()

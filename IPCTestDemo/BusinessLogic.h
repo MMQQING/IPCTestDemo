@@ -1,13 +1,14 @@
 #pragma once
 #include <QObject>
 #include <QTimer>
+#include <QWidget>
 #include "prompt.h"
 #include "autoprompt.h"
 class BusinessLogic : public QObject
 {
 	Q_OBJECT
 public:
-	BusinessLogic();
+	explicit BusinessLogic(QWidget *parent = nullptr);
 	~BusinessLogic();
 	void init();
 	void setPCMD(ParsingCmd* cmd);
@@ -25,6 +26,7 @@ signals:
 	void timeout(QString testname, int time);
 	void autotimeout(QString testname, int time);
 private:
+	QWidget*					_ParentWideget;
 	ParsingCmd*					_ParCMD;
 	prompt						_MyPromtWidget;
 	autoprompt					_MyAutoPromtWidget;

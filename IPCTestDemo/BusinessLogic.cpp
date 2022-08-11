@@ -1,7 +1,8 @@
 #include "BusinessLogic.h"
 #include "GlobleVar.h"
-BusinessLogic::BusinessLogic()
+BusinessLogic::BusinessLogic(QWidget *parent)
 {
+	_ParentWideget = parent;
 	init();
 }
 
@@ -34,6 +35,9 @@ void BusinessLogic::slots_ManTest(QString testname, int time)
 	_TestName = testname;
 	int _timeout = time * 1000;
 	_MyPromtWidget.setTitle(testname);
+	int x =_ParentWideget->geometry().x();
+	int y = _ParentWideget->geometry().y() + 27 + _ParentWideget->geometry().height() - 200;
+	_MyPromtWidget.move(x,y);
 	_MyPromtWidget.show();
 	_MyPromtWidget.raise();
 	emit timeout(_TestName,_timeout);
@@ -44,6 +48,9 @@ void BusinessLogic::slots_AutoTest(QString testname, int time)
 	_TestName = testname;
 	int _timeout = time * 1000;
 	_MyAutoPromtWidget.setTitle(testname);
+	int x = _ParentWideget->geometry().x();
+	int y = _ParentWideget->geometry().y() + 27 + _ParentWideget->geometry().height() - 200;
+	_MyPromtWidget.move(x, y);
 	_MyAutoPromtWidget.show();
 	_MyAutoPromtWidget.raise();
 	emit autotimeout(_TestName,_timeout);

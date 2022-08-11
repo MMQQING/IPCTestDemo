@@ -25,8 +25,8 @@ IPCTestDemo::~IPCTestDemo()
 
 void IPCTestDemo::bindSinalSlot()
 {
-	bool bl = connect(&_ParCmd, SIGNAL(manTimeout(QString,int)), &_Business, SLOT(slots_ManTest(QString,int)));
-	bl = connect(&_ParCmd, SIGNAL(autoTimeout(QString, int)), &_Business, SLOT(slots_AutoTest(QString, int)));
+	bool bl = connect(&_ParCmd, SIGNAL(manTimeout(QString,int)), _Business, SLOT(slots_ManTest(QString,int)));
+	bl = connect(&_ParCmd, SIGNAL(autoTimeout(QString, int)), _Business, SLOT(slots_AutoTest(QString, int)));
 	bl = connect(_Mesjob.get(), SIGNAL(mes40Res(bool, QString)), this, SLOT(upDataToPage_40(bool, QString)));
 	bl = connect(_Mesjob.get(), SIGNAL(mes20Res(bool, QString)), this, SLOT(upDataToPage_20(bool, QString)));
 	bl = connect(&_ParCmd, SIGNAL(message(QVariant, QString)), this, SLOT(upDataFromIPC(QVariant, QString)));
@@ -68,6 +68,7 @@ void IPCTestDemo::initPage()
 	//qApp->installEventFilter(this); //为所有控件添加事件过滤器
 
 	m_ffmpeg = new MyFFmpeg;
+	_Business = new BusinessLogic(ui->groupBox_2);
 	bool bl = connect(m_ffmpeg, SIGNAL(MyFFmpegSigGetOneFrame(QImage)), this, SLOT(SlotGetOneFrame(QImage)));
 
 	ui->label->setStyleSheet("QLabel{border:2px solid green}");
@@ -379,12 +380,19 @@ void IPCTestDemo::on_pushButton_clicked()
 void IPCTestDemo::on_pushButton_2_clicked()
 {
 	_ParCmd.tcpConnect();
+	ui->pushButton_2->setEnabled(false);
 }
 
 void IPCTestDemo::slots_testButton()
 {
 	_testlist.clear();
 	_mapResult.clear();
+	QMap<QString, QLabel*>::iterator iter = _map.begin();
+	while (iter != _map.end())
+	{
+		iter.value()->setStyleSheet("background-color:#F0F0F0;"); // 迭代器
+		iter++;
+	}
 	for (auto a: _testvec)
 	{
 		_testlist.push_back(toTestName(a));
@@ -424,13 +432,14 @@ void IPCTestDemo::slots_isConnectIPC(bool bl)
 		ui->lineEdit_connect->setText(QString::fromLocal8Bit("连接成功"));
 		Sleep(100);
 		getDeviceInfo();
-		_Business.setPCMD(&_ParCmd);
+		_Business->setPCMD(&_ParCmd);
 	}
 	else
 	{
 		ui->lineEdit_connect->setText(QString::fromLocal8Bit("连接失败"));
 	}
 	IsConnectIPC = bl;
+	ui->pushButton_2->setEnabled(true);
 }
 
 void IPCTestDemo::slots_ManTest(QString testname, int revalue)

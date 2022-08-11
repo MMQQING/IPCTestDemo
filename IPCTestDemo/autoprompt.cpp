@@ -17,7 +17,7 @@ void autoprompt::setPCMD(ParsingCmd* cmd)
 
 void autoprompt::setTitle(QString str)
 {
-	ui.label->setText(str);
+	ui.label->setText(gVar->TestProjectName(str));
 }
 
 void autoprompt::slots_close_window()

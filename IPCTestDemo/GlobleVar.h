@@ -46,6 +46,7 @@ class ParsingCmd;
 	 void savepara(std::string str);
 	 void loadpara(std::string str);
 	 int comparTestname(QString str);
+	 QString TestProjectName(QString str);
 
 	 std::shared_ptr<ParsingCmd>	    m_cmdObject;
 	 st_common_info						m_stCommonInfo;                 //通用信息
