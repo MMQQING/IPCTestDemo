@@ -257,7 +257,7 @@ std::string ParsingCmd::TS_SetOperatorsInfo()
 	value3->set_value(gVar->m_st40Info.CMEI);
 
 	IM::info_s *value4 = data->add_value();
-	value4->set_name("deviceserialnumber");
+	value4->set_name("deviceserialnumber");					//ºÍSNÒ»ÖÂ
 	value4->set_value(gVar->m_st40Info.DeviceSerialNumber);
 
 	IM::info_s *value5 = data->add_value();

@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QMetaType>
 #include <algorithm>
+#include <QFormLayout>
 
 IPCTestDemo::IPCTestDemo(QWidget *parent)
 	: QWidget(parent),
@@ -54,9 +55,10 @@ void IPCTestDemo::initPage()
 	ui->horizontalLayout_3->setStretchFactor(ui->lineEdit_IP,7);
 	ui->horizontalLayout_3->setStretchFactor(ui->pushButton_2,3);
 
+	ui->lineEdit_IP->hide();
 	ui->lineEdit_connect->setEnabled(false);
 	ui->lineEdit_MAC->setEnabled(false);
-	ui->lineEdit_CMEI->setEnabled(false);
+	ui->lineEdit_SN->setEnabled(false);
 	ui->lineEdit_UID->setEnabled(false);
 	ui->lineEdit_DevKey->setEnabled(false);
 	ui->lineEdit_UserPass->setEnabled(false);
@@ -74,6 +76,19 @@ void IPCTestDemo::initPage()
 	ui->label->setStyleSheet("QLabel{border:2px solid green}");
 	ui->label->installEventFilter(this);
 	ui->pushButton->setEnabled(true);
+	edit_CMEI = new ButtonEdit(QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton));
+	QObject::connect(edit_CMEI, &ButtonEdit::buttonClicked, [&](bool) {edit_CMEI->setText(""); });
+	auto layout = new QFormLayout;
+	layout->addRow(edit_CMEI);
+	layout->setMargin(0);
+	ui->SN_widget->setLayout(layout);
+	
+	edit_AppVersion = new ButtonEdit(QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton));
+	QObject::connect(edit_AppVersion, &ButtonEdit::buttonClicked, [&](bool) {edit_AppVersion->setText(""); });
+	auto layout_1 = new QFormLayout;
+	layout_1->addRow(edit_AppVersion);
+	layout_1->setMargin(0);
+	ui->AppVersion_widget->setLayout(layout_1);
 }
 
 void IPCTestDemo::initParam()
@@ -132,11 +147,16 @@ void IPCTestDemo::getDeviceInfo()
 
 void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 {
-	if (map.value("sn") == ui->lineEdit_SN->text()) {
-		ui->lineEdit_SN->setStyleSheet("background-color:#64A600;");
+// 	if (map.value("sn") == ui->lineEdit_SN->text()) {
+// 		ui->lineEdit_SN->setStyleSheet("background-color:#64A600;");
+// 	else {
+// 	ui->lineEdit_SN->setStyleSheet("background-color:#A23400;");
+// 	}
+	if (map.value("cmei") == edit_CMEI->text()) {
+		edit_CMEI->setStyleSheet("background-color:#64A600;");
 	}
 	else{
-		ui->lineEdit_SN->setStyleSheet("background-color:#A23400;");
+		edit_CMEI->setStyleSheet("background-color:#A23400;");
 	}
 
 	if(map.value("mac") == ui->lineEdit_MAC->text()) {
@@ -146,11 +166,11 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_MAC->setStyleSheet("background-color:#A23400;");
 	}
 
-	if (map.value("cmei") == ui->lineEdit_CMEI->text()) {
-		ui->lineEdit_CMEI->setStyleSheet("background-color:#64A600;");
+	if (map.value("sn") == ui->lineEdit_SN->text()) {
+		ui->lineEdit_SN->setStyleSheet("background-color:#64A600;");
 	}
 	else{
-		ui->lineEdit_CMEI->setStyleSheet("background-color:#A23400;");
+		ui->lineEdit_SN->setStyleSheet("background-color:#A23400;");
 	}
 
 	if (map.value("deviceserialnumber") == ui->lineEdit_UID->text()) {
@@ -256,7 +276,7 @@ void IPCTestDemo::upDataToPage_40(bool bl, QString str)
 {
 	if (bl) {
 		ui->lineEdit_MAC->setText(QString::fromStdString(gVar->m_st40Info.Mac));
-		ui->lineEdit_CMEI->setText(QString::fromStdString(gVar->m_st40Info.CMEI));
+		ui->lineEdit_SN->setText(QString::fromStdString(gVar->m_st40Info.SN));
 		ui->lineEdit_UID->setText(QString::fromStdString(gVar->m_st40Info.DeviceSerialNumber));
 		ui->lineEdit_DevKey->setText(QString::fromStdString(gVar->m_st40Info.DevKey));
 		ui->lineEdit_UserPass->setText(QString::fromStdString(gVar->m_st40Info.UserPass));
@@ -275,8 +295,18 @@ void IPCTestDemo::upDataFromIPC(QVariant var, QString str)
 	QMap<QString, QString> _maps = var.value<QMap<QString, QString>>();
 	if (str == "devinfo") {
 		ui->lineEdit_DeviceName->setText(_maps.value("device_name"));
-		ui->lineEdit_AppVersion->setText(_maps.value("app_version"));
 		ui->lineEdit_DeviceModel->setText(_maps.value("device_model"));
+		QString str = _maps.value("app_version");
+//		if (str.compare(ui->AppVersionIn_lineEdit->text()) == 0)
+		if (str.compare(edit_AppVersion->text()) == 0)
+		{
+			ui->lineEdit_AppVersion->setStyleSheet("background-color:#64A600;");
+		}
+		else
+		{
+			ui->lineEdit_AppVersion->setStyleSheet("background-color:#A23400;");
+		}
+		ui->lineEdit_AppVersion->setText(str);
 	}
 	else if(str == "url"){
 		foreach(const QString str, _maps.keys())
@@ -369,6 +399,7 @@ void IPCTestDemo::on_pushButton_clicked()
 		}
 
 		ui->pushButton->setEnabled(false);
+		_ParCmd.ParsCmd(CMD_SETTIME, A_TEST);
 		this->PlayProcess();
 	}
 	else if (ui->pushButton->text().compare("stop") == 0) {
@@ -428,7 +459,6 @@ void IPCTestDemo::slots_isConnectIPC(bool bl)
 {
 	if (bl) {
 		_ParCmd.ParsCmd(CMD_URL, A_TEST);
-		_ParCmd.ParsCmd(CMD_SETTIME, A_TEST);
 		ui->lineEdit_connect->setText(QString::fromLocal8Bit("连接成功"));
 		Sleep(100);
 		getDeviceInfo();
@@ -507,30 +537,23 @@ void IPCTestDemo::slots_upReturn(QString testname, int revalue)
 	//}
 }
 
-void IPCTestDemo::keyPressEvent(QKeyEvent *keyValue)
+// void IPCTestDemo::keyPressEvent(QKeyEvent *keyValue)
+// {
+// 	if (keyValue->key() == Qt::Key_Return) //扫码枪内字符串，以回车结尾
+// 	{
+// //		_Mesjob->common_get20info(ui->lineEdit_SN->text());
+// 		_Mesjob->common_get20info(edit_SN->text());
+// 	}
+// }
+
+void IPCTestDemo::keyReleaseEvent(QKeyEvent *event)
 {
-	if (keyValue->key() == Qt::Key_Return) //扫码枪内字符串，以回车结尾
+	if (event->key() == Qt::Key_Return) //扫码枪内字符串，以回车结尾
 	{
-		_Mesjob->common_get20info(ui->lineEdit_SN->text());
+		_Mesjob->common_get20info(edit_CMEI->text());
+		//qDebug() << "QrCode R:" << barStr;
 	}
 }
-
-// bool IPCTestDemo::eventFilter(QObject *watched, QEvent *event) {
-// 	QString STR = watched->objectName();
-// 	if (event->type() == QEvent::MouseButtonPress && watched->objectName() != "lineEdit_SN" && watched->objectName() != "lineEdit_IP")
-// 	{
-// 		ui->lineEdit_SN->clearFocus();
-// 		ui->lineEdit_IP->clearFocus();
-// 		this->setFocus();
-// 		ui->lineEdit_SN->releaseKeyboard();
-//  	}
-// 	if(watched == ui->lineEdit_SN){
-// 		if(event->type() == QEvent::MouseButtonPress){
-// 			ui->lineEdit_SN->grabKeyboard();
-// 		}
-// 	}
-// 	return QWidget::eventFilter(watched, event);
-// }
 
 void IPCTestDemo::paintEvent(QPaintEvent *e)
 {

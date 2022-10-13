@@ -157,6 +157,9 @@
     <ClCompile Include="prompt.cpp">
       <Filter>Source Files\界面模块</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonEdit.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="load_dll.h">
@@ -286,6 +289,9 @@
     </QtMoc>
     <QtMoc Include="prompt.h">
       <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="ButtonEdit.h">
+      <Filter>CustomBtn</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

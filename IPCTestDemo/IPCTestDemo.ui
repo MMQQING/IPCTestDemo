@@ -106,34 +106,6 @@
                 </property>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_4">
-                  <item row="7" column="0">
-                   <widget class="QLabel" name="label_UserPass">
-                    <property name="text">
-                     <string>UserPass</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_CMEI">
-                    <property name="text">
-                     <string>CMEI</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="8" column="0">
-                   <widget class="QLabel" name="label_DeviceName">
-                    <property name="text">
-                     <string>DeviceName</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_SN">
-                    <property name="text">
-                     <string>SN</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="0" column="2">
                    <layout class="QHBoxLayout" name="horizontalLayout_3">
                     <item>
@@ -148,35 +120,25 @@
                     </item>
                    </layout>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_connect">
-                    <property name="text">
-                     <string>连接状态</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QLineEdit" name="lineEdit_connect"/>
-                  </item>
-                  <item row="8" column="2">
-                   <widget class="QLineEdit" name="lineEdit_DeviceName"/>
-                  </item>
-                  <item row="3" column="0">
+                  <item row="4" column="0">
                    <widget class="QLabel" name="label_MAC">
                     <property name="text">
                      <string>MAC</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="7" column="2">
-                   <widget class="QLineEdit" name="lineEdit_UserPass"/>
-                  </item>
                   <item row="9" column="0">
-                   <widget class="QLabel" name="label_AppVersion">
+                   <widget class="QLabel" name="label_DeviceName">
                     <property name="text">
-                     <string>AppVersion</string>
+                     <string>DeviceName</string>
                     </property>
                    </widget>
+                  </item>
+                  <item row="6" column="2">
+                   <widget class="QLineEdit" name="lineEdit_UID"/>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QWidget" name="SN_widget" native="true"/>
                   </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_IP">
@@ -185,47 +147,95 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="5" column="0">
-                   <widget class="QLabel" name="label_UID">
+                  <item row="1" column="2">
+                   <widget class="QLineEdit" name="lineEdit_connect"/>
+                  </item>
+                  <item row="7" column="2">
+                   <widget class="QLineEdit" name="lineEdit_DevKey"/>
+                  </item>
+                  <item row="5" column="2">
+                   <widget class="QLineEdit" name="lineEdit_SN"/>
+                  </item>
+                  <item row="10" column="0">
+                   <widget class="QLabel" name="label_AppVersion">
                     <property name="text">
-                     <string>UID</string>
+                     <string>AppVersion</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="2">
-                   <widget class="QLineEdit" name="lineEdit_SN"/>
-                  </item>
-                  <item row="6" column="0">
+                  <item row="7" column="0">
                    <widget class="QLabel" name="label_DevKey">
                     <property name="text">
                      <string>DevKey</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="9" column="2">
-                   <widget class="QLineEdit" name="lineEdit_AppVersion"/>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_connect">
+                    <property name="text">
+                     <string>连接状态</string>
+                    </property>
+                   </widget>
                   </item>
-                  <item row="5" column="2">
-                   <widget class="QLineEdit" name="lineEdit_UID"/>
-                  </item>
-                  <item row="6" column="2">
-                   <widget class="QLineEdit" name="lineEdit_DevKey"/>
-                  </item>
-                  <item row="4" column="2">
-                   <widget class="QLineEdit" name="lineEdit_CMEI"/>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QLineEdit" name="lineEdit_MAC"/>
-                  </item>
-                  <item row="10" column="0">
+                  <item row="11" column="0">
                    <widget class="QLabel" name="label_DeviceModel">
                     <property name="text">
                      <string>DeviceModel</string>
                     </property>
                    </widget>
                   </item>
+                  <item row="9" column="2">
+                   <widget class="QLineEdit" name="lineEdit_DeviceName"/>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="label_UID">
+                    <property name="text">
+                     <string>UID</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="AppVersion_label">
+                    <property name="text">
+                     <string>AppVersion</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="10" column="2">
+                   <widget class="QLineEdit" name="lineEdit_AppVersion"/>
+                  </item>
+                  <item row="4" column="2">
+                   <widget class="QLineEdit" name="lineEdit_MAC"/>
+                  </item>
+                  <item row="11" column="2">
                    <widget class="QLineEdit" name="lineEdit_DeviceModel"/>
+                  </item>
+                  <item row="8" column="2">
+                   <widget class="QLineEdit" name="lineEdit_UserPass"/>
+                  </item>
+                  <item row="8" column="0">
+                   <widget class="QLabel" name="label_UserPass">
+                    <property name="text">
+                     <string>UserPass</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QWidget" name="AppVersion_widget" native="true"/>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_SN">
+                    <property name="text">
+                     <string>SN</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_CMEI">
+                    <property name="text">
+                     <string>CMEI</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>

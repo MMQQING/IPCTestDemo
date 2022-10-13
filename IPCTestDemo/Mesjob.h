@@ -17,7 +17,8 @@ private:
 	std::string UTF8_To_String(std::string str);
 public:
 	bool common_login();
-	void common_get20info(QString SNstr);
+	//void common_get20info(QString SNstr);
+	void common_get20info(QString);
 	void common_get40info();
 	void common_send30info(int bl, QString str, QString errstr);
 signals:

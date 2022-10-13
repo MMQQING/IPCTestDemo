@@ -18,7 +18,7 @@ Login::~Login()
 
 void Login::Init()
 {
-	ui.objadvcfg->setEnabled(false);
+	//ui.objadvcfg->setEnabled(false);
 	setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
 	setFixedSize(this->width(), this->height());	
 	CpcLogs::init_log((severity_levels)7, (severity_levels)7);
@@ -145,6 +145,9 @@ void Login::slot_test()
 {
 	//连接服务端TCP
 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
+	ptr->m_stCommonInfo.strUsername = ui.objaccount->text().toStdString();
+	ptr->m_stCommonInfo.strPsw = ui.objpsw->text().toStdString();
+	ptr->m_stCommonInfo.iResCode = ui.objrescode->text().toStdString();
 	ptr->m_stCommonInfo.strLocalIP = ui.objlocalip->currentText().toStdString();
 	ptr->m_stCommonInfo.strRemoteIP = ui.objServerip->text().toStdString();
 	std::shared_ptr<ParsingCmd> ptrCmd = ptr->m_cmdObject;

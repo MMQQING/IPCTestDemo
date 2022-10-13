@@ -3,7 +3,6 @@
 
 Mesjob::Mesjob()
 {
-
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
 	auto scheme_host_port = "https://localhost:5003";
 #else
@@ -138,15 +137,84 @@ bool Mesjob::common_login()
 	return false;
 }
 
-void Mesjob::common_get20info(QString SNstr)
+//通过SN查询
+// void Mesjob::common_get20info(QString SNstr)
+// {
+// 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
+// 	using namespace boost::property_tree;
+// 	ptree pt;
+// 	pt.put<std::string>("document.IsTransferMO", std::to_string(0));
+// 	pt.put<std::string>("document.MOId", "");
+// 	pt.put<std::string>("document.LotSNType", "SN");
+// 	pt.put<std::string>("document.LotSN", SNstr.toStdString());
+// 	pt.put<std::string>("document.LineId", ptr->m_stLoginInfo.LineId);
+// 	pt.put<std::string>("document.ResId", ptr->m_stLoginInfo.ResId);
+// 	pt.put<std::string>("document.UserId", ptr->m_stLoginInfo.UserId);
+// 	pt.put<std::string>("document.OPId", ptr->m_stLoginInfo.OPId);
+// 	xml_writer_settings <std::string > settings('\t', 1);
+// 	std::stringstream str_stream;
+// 	write_xml(str_stream, pt);
+// 	std::string str = str_stream.str();
+// 	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
+// 	str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
+// 	//json
+// 	boost::property_tree::ptree pItem;
+// 	pItem.put("InterfaceNo", std::to_string(20));
+// 	pItem.put("Params", str);
+// 	pItem.put("AttachParams", "");
+// 
+// 	std::stringstream stream;
+// 	write_json(stream, pItem);
+// 	std::string str1 = stream.str();
+// 	//遍历结构体代码test
+// 	st_20_result* P_Member = &gVar->m_st20Info;		//指向结构体的指针
+// 	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
+// 
+// 	//发送给web
+// 	std::string body = stream.str();
+// 	if (auto res = cli->Post("/common/call", body, "application/json")) {
+// 		if (res->status == 200) {
+// 			std::cout << res->body << std::endl;
+// 			std::string m_str = UTF8_To_String(res->body);
+// 			boost::property_tree::ptree pt = parse_res(m_str);
+// 			std::string str = pt.get<std::string>("document.ReturnValue");
+// 			if (!atoi(str.c_str())) {
+// 				str = pt.get<std::string>("document.ReturnMessage");
+// 				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()));
+// 				CPCLOG_ERROR << str;
+// 				return;
+// 			}
+// 			else
+// 			{
+// 				auto child = pt.get_child("document");
+// 				for (auto i = child.begin(); i != child.end(); ++i) {
+// 					(*P++) = i->second.get_value<std::string>();
+// 				}
+// 				//TEST
+// 				emit mes20Res(true, QString::fromLocal8Bit("校验成功"));
+// 				common_get40info();
+// 				return;
+// 			}
+// 		}
+// 	}
+// 	else {
+// 		emit mes20Res(false, QString::fromLocal8Bit("请修改MES地址..."));
+// 		CPCLOG_ERROR << QString::fromLocal8Bit("请修改MES地址...").toStdString();
+// 		return;
+// 	}
+// 	return;
+// }
+
+//通过CMEI查询
+void Mesjob::common_get20info(QString CMEIstr)
 {
 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
 	using namespace boost::property_tree;
 	ptree pt;
 	pt.put<std::string>("document.IsTransferMO", std::to_string(0));
 	pt.put<std::string>("document.MOId", "");
-	pt.put<std::string>("document.LotSNType", "SN");
-	pt.put<std::string>("document.LotSN", SNstr.toStdString());
+	pt.put<std::string>("document.LotSNType", "CMEI");
+	pt.put<std::string>("document.LotSN", CMEIstr.toStdString());
 	pt.put<std::string>("document.LineId", ptr->m_stLoginInfo.LineId);
 	pt.put<std::string>("document.ResId", ptr->m_stLoginInfo.ResId);
 	pt.put<std::string>("document.UserId", ptr->m_stLoginInfo.UserId);
@@ -248,9 +316,11 @@ void Mesjob::common_get40info()
 			{
 				gVar->m_st40Info.Mac = pt.get<std::string>("document.Mac");
 				gVar->m_st40Info.SN = pt.get<std::string>("document.SN");
-				gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.DeviceSerialNumber");
+				//gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.DeviceSerialNumber");
+				gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.SN");
 				gVar->m_st40Info.CMEI = pt.get<std::string>("document.CMEI");
-				gVar->m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
+				//gVar->m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
+				gVar->m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
 				gVar->m_st40Info.UserPass = pt.get<std::string>("document.UserPass");
 				//TEST
 				emit mes40Res(true, QString::fromLocal8Bit("信息获取成功"));

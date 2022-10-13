@@ -37,7 +37,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>5.12.4_msvc2017_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -59,9 +59,16 @@
     <IncludePath>$(BOOST_1_70_0)\include;$(ProjectDir)include;$(ProjectDir)CustomBtn;$(ProjectDir)ffmpeg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <LibraryPath>$(ProjectDir)lib\release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)lib\release;$(BOOST_1_70_0)\lib;$(ProjectDir)ffpeg\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(BOOST_1_70_0)\include;$(ProjectDir)include;$(ProjectDir)CustomBtn;$(ProjectDir)ffmpeg\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -97,6 +104,7 @@
     <ClCompile Include="AddTestItemDialog.cpp" />
     <ClCompile Include="autoprompt.cpp" />
     <ClCompile Include="BusinessLogic.cpp" />
+    <ClCompile Include="ButtonEdit.cpp" />
     <ClCompile Include="Cpclog.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="CustomBtn\CPCQDoubleSpinBox.cpp" />
@@ -135,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="autoprompt.h" />
+    <QtMoc Include="ButtonEdit.h" />
     <ClInclude Include="Cpclog.h" />
     <QtMoc Include="Mesjob.h" />
     <QtMoc Include="MyFFmpeg.h" />

@@ -7,6 +7,7 @@
 #include "Mesjob.h"
 #include <QThread>
 #include "RTSP_Player.h"
+#include "ButtonEdit.h"
 
 class IPCTestDemo : public QWidget
 {
@@ -30,7 +31,8 @@ private:
 	QString errCode(QString str);
 	QString toTestName(QString str);
 protected:
-	void keyPressEvent(QKeyEvent *);//手持扫码
+	//void keyPressEvent(QKeyEvent *);//手持扫码
+	void keyReleaseEvent(QKeyEvent *event) override;
 	//bool eventFilter(QObject *watched, QEvent *event);
 
 	void paintEvent(QPaintEvent *e);
@@ -79,4 +81,6 @@ private:
 	QMap<QString, QString>	_mapResult;
 	QList<QString>			_testlist;
 	QVector<QString>		_testvec;
+	ButtonEdit*				edit_CMEI;
+	ButtonEdit*				edit_AppVersion;
 };

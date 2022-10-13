@@ -4,7 +4,7 @@
 		<para account="wmssync" psw="wmssync" autolog="0" access="0" rescode="3FA01-F7-01"/>
 	</login>
 	<Comm>
-		<tcppara lip="192.168.11.22" rip="192.168.11.88" lport="4000" rport="10801"/>
+		<tcppara lip="172.16.23.86" rip="192.168.11.88" lport="4000" rport="10801"/>
 		<url ipcurl=""/>
 	</Comm>
 	<webPara>
