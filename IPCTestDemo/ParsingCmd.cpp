@@ -28,6 +28,12 @@ void ParsingCmd::tcpConnect()
 	m_tcpClient->connect();
 }
 
+void ParsingCmd::tcpDisConnect()
+{
+	if (m_ptrGloble->m_stCommonInfo.itcpConn == 1)
+		m_tcpClient->disConnect();
+}
+
 void ParsingCmd::mesConnect()
 {
 	if(m_ptrMes->common_login()){

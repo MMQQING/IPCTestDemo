@@ -138,7 +138,7 @@
                    <widget class="QLineEdit" name="lineEdit_UID"/>
                   </item>
                   <item row="2" column="2">
-                   <widget class="QWidget" name="SN_widget" native="true"/>
+                   <widget class="QWidget" name="CMEI_widget" native="true"/>
                   </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_IP">

@@ -320,8 +320,9 @@ void Mesjob::common_get40info()
 				gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.SN");
 				gVar->m_st40Info.CMEI = pt.get<std::string>("document.CMEI");
 				//gVar->m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
-				gVar->m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
-				gVar->m_st40Info.UserPass = pt.get<std::string>("document.UserPass");
+				//gVar->m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
+				gVar->m_st40Info.UserPass = pt.get<std::string>("document.CiphertextPassword");
+				gVar->m_st40Info.DevKey = pt.get<std::string>("document.UserPass");
 				//TEST
 				emit mes40Res(true, QString::fromLocal8Bit("信息获取成功"));
 				return;

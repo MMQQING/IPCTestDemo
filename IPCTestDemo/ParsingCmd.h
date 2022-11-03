@@ -18,6 +18,7 @@ public:
 
 	void init();
 	void tcpConnect();
+	void tcpDisConnect();
 	void mesConnect();
 	//·¢ËÍÃüÁî
 	void ParsCmd(uint32_t testname, uint32_t command, uint32_t value = 0);

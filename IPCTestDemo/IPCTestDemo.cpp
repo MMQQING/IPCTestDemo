@@ -81,7 +81,7 @@ void IPCTestDemo::initPage()
 	auto layout = new QFormLayout;
 	layout->addRow(edit_CMEI);
 	layout->setMargin(0);
-	ui->SN_widget->setLayout(layout);
+	ui->CMEI_widget->setLayout(layout);
 	
 	edit_AppVersion = new ButtonEdit(QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton));
 	QObject::connect(edit_AppVersion, &ButtonEdit::buttonClicked, [&](bool) {edit_AppVersion->setText(""); });
@@ -147,15 +147,12 @@ void IPCTestDemo::getDeviceInfo()
 
 void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 {
-// 	if (map.value("sn") == ui->lineEdit_SN->text()) {
-// 		ui->lineEdit_SN->setStyleSheet("background-color:#64A600;");
-// 	else {
-// 	ui->lineEdit_SN->setStyleSheet("background-color:#A23400;");
-// 	}
+	bool bl = true;
 	if (map.value("cmei") == edit_CMEI->text()) {
 		edit_CMEI->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		edit_CMEI->setStyleSheet("background-color:#A23400;");
 	}
 
@@ -163,6 +160,7 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_MAC->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		ui->lineEdit_MAC->setStyleSheet("background-color:#A23400;");
 	}
 
@@ -170,6 +168,7 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_SN->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		ui->lineEdit_SN->setStyleSheet("background-color:#A23400;");
 	}
 
@@ -177,6 +176,7 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_UID->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		ui->lineEdit_UID->setStyleSheet("background-color:#A23400;");
 	}
 
@@ -184,6 +184,7 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_DevKey->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		ui->lineEdit_DevKey->setStyleSheet("background-color:#A23400;");
 	}
 
@@ -191,7 +192,15 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 		ui->lineEdit_UserPass->setStyleSheet("background-color:#64A600;");
 	}
 	else{
+		bl = false;
 		ui->lineEdit_UserPass->setStyleSheet("background-color:#A23400;");
+	}
+	if(bl){
+		slots_upButton();
+	}
+	else{
+		QString str = "比对失败";
+		ui->label_2->setText(str);
 	}
 }
 
@@ -241,6 +250,42 @@ QString IPCTestDemo::toTestName(QString str)
 	}
 }
 
+void IPCTestDemo::clearMesInfo()
+{
+	ui->lineEdit_MAC->setText("");
+	ui->lineEdit_SN->setText("");
+	ui->lineEdit_UID->setText("");
+	ui->lineEdit_DevKey->setText("");
+	ui->lineEdit_UserPass->setText("");
+	edit_CMEI->setText("");
+	ui->lineEdit_MAC->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_SN->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_UID->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_DevKey->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_UserPass->setStyleSheet("background-color:#F0F0F0;");
+}
+
+void IPCTestDemo::clearAllInfo()
+{
+	ui->lineEdit_MAC->setText("");
+	ui->lineEdit_SN->setText("");
+	ui->lineEdit_UID->setText("");
+	ui->lineEdit_DevKey->setText("");
+	ui->lineEdit_UserPass->setText("");
+	ui->lineEdit_DeviceName->setText("");
+	ui->lineEdit_AppVersion->setText("");
+	ui->lineEdit_DeviceModel->setText("");
+	edit_CMEI->setText("");
+	ui->lineEdit_MAC->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_SN->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_UID->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_DevKey->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_UserPass->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_DeviceName->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_AppVersion->setStyleSheet("background-color:#F0F0F0;");
+	ui->lineEdit_DeviceModel->setStyleSheet("background-color:#F0F0F0;");
+}
+
 void IPCTestDemo::initTestItems(QVector<QString> vec)
 {
 	_testvec = vec;
@@ -265,10 +310,20 @@ void IPCTestDemo::initTestItems(QVector<QString> vec)
 	ui->groupBox_3->setLayout(layout);
 	bool bl = connect(btn, SIGNAL(clicked()), this, SLOT(slots_testButton()));
 	bl = connect(btn1, SIGNAL(clicked()), this, SLOT(slots_upButton()));
+	btn1->hide();
 }
 
 void IPCTestDemo::upDataToPage_20(bool bl, QString str)
 {
+	if (bl)
+	{
+		clearAllInfo();
+		if (ui->pushButton->text().compare("stop") == 0) {
+			ui->pushButton->setEnabled(false);
+			this->PlayStop();
+		}
+		_ParCmd.tcpDisConnect();
+	}
 	ui->label_2->setText(str);
 }
 
@@ -410,8 +465,14 @@ void IPCTestDemo::on_pushButton_clicked()
 
 void IPCTestDemo::on_pushButton_2_clicked()
 {
-	_ParCmd.tcpConnect();
-	ui->pushButton_2->setEnabled(false);
+	if (ui->pushButton_2->text().compare(QString::fromLocal8Bit("连接")) == 0) {
+		_ParCmd.tcpConnect();
+		ui->pushButton_2->setEnabled(false);
+	}
+	else if (ui->pushButton_2->text().compare(QString::fromLocal8Bit("断开连接")) == 0) {
+		_ParCmd.tcpDisConnect();
+		ui->pushButton_2->setEnabled(false);
+	}
 }
 
 void IPCTestDemo::slots_testButton()
@@ -460,12 +521,14 @@ void IPCTestDemo::slots_isConnectIPC(bool bl)
 	if (bl) {
 		_ParCmd.ParsCmd(CMD_URL, A_TEST);
 		ui->lineEdit_connect->setText(QString::fromLocal8Bit("连接成功"));
+		ui->pushButton_2->setText(QString::fromLocal8Bit("断开连接"));
 		Sleep(100);
 		getDeviceInfo();
 		_Business->setPCMD(&_ParCmd);
 	}
 	else
 	{
+		ui->pushButton_2->setText(QString::fromLocal8Bit("连接"));
 		ui->lineEdit_connect->setText(QString::fromLocal8Bit("连接失败"));
 	}
 	IsConnectIPC = bl;
@@ -532,9 +595,16 @@ void IPCTestDemo::slots_NextTest()
 
 void IPCTestDemo::slots_upReturn(QString testname, int revalue)
 {
-	//if(!_mapResult.contains(testname)){
-		_mapResult.insert(testname, QString::number(revalue));
-	//}
+	if (testname.contains("keywrite")) {
+		if (revalue == 1) {
+			ui->label_2->setText("写入信息成功");
+			clearMesInfo();
+		}
+		else {
+			ui->label_2->setText("写入信息失败");
+		}
+	}
+	_mapResult.insert(testname, QString::number(revalue));
 }
 
 // void IPCTestDemo::keyPressEvent(QKeyEvent *keyValue)

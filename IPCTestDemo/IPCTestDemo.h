@@ -30,6 +30,8 @@ private:
 
 	QString errCode(QString str);
 	QString toTestName(QString str);
+	void clearMesInfo();
+	void clearAllInfo();
 protected:
 	//void keyPressEvent(QKeyEvent *);// ÷≥÷…®¬Î
 	void keyReleaseEvent(QKeyEvent *event) override;
