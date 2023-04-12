@@ -13,7 +13,7 @@ public:
 	~prompt();
 	void init();
 	void setPCMD(ParsingCmd* cmd);
-	void setTitle(QString);
+	void setTitle(QString, int, int);
 private:
 	void bindSinalSlot();
 private slots:

@@ -2,6 +2,8 @@
 #include <QString>
 #include <QObject>
 #include <QImage>
+#include <wtypes.h>
+//#include "RtspPusher.h"
 extern "C"
 {
 #include <libavcodec/avcodec.h>
@@ -26,6 +28,13 @@ public:
 	int MyFFmpegInit();
 	void MyFFmpegDestroy();
 	int MyFFmpepReadFrame();
+
+	bool IsTimeout();
+	void SetTimeout(int);
+	void RestTiemout();
+	int  GetTimeout();
+	int64_t GetBlockTime();
+	static int decode_interrupt_cb(void *ctx);
 signals:
 	void MyFFmpegSigGetOneFrame(QImage img);
 private:
@@ -41,6 +50,11 @@ private:
 	SwsContext      *m_SwsContext;
 	uint8_t         *m_OutBuffer;
 	int frameIndex;
+	int time_out;
+
+	DWORD pre_time_;
+	int timeout_;
+	//RtspPusher		*rtsp_puser;
 };
 
 

@@ -1,0 +1,9 @@
+QWidget
+{
+    background-color:#373737;
+}
+#title_Text
+{
+	font-size: 30px;
+	color: #FFFFFF;
+}

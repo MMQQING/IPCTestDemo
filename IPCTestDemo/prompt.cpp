@@ -15,6 +15,10 @@ prompt::~prompt()
 
 void prompt::init()
 {
+	//this->setWindowFlags(Qt::WindowStaysOnTopHint);
+	setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
+	ui.label->setAlignment(Qt::AlignCenter);
+	ui.label->setStyleSheet("QLabel{font-size: 18px;}");
 	bindSinalSlot();
 }
 
@@ -23,8 +27,9 @@ void prompt::setPCMD(ParsingCmd* cmd)
 	_ParCMD = cmd;
 }
 
-void prompt::setTitle(QString str)
+void prompt::setTitle(QString str, int w, int h)
 {
+	this->setFixedSize(w, h);
 	ui.label->setText(gVar->TestProjectName(str));
 }
 

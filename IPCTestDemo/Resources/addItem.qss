@@ -1,0 +1,58 @@
+QWidget{
+    background:#212121;
+}
+QPushButton{
+	font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid #666666;
+    background: rgba(102,102,102,0.25);
+    color: rgba(255,255,255,0.9);
+}
+QPushButton:enabled:hover{ 
+    color: rgba(0,0,0,0.9);
+    background: #FFFFFF;
+}
+QListWidget{
+	background: rgba(102,102,102,0.25);
+	border: 1px solid #666666;
+	font-size: 14px;
+	padding-top:23px;
+	padding-bottom:23px;
+	outline:0px;
+}
+QListView::item{
+    border : 0px solid black;
+	padding-left:14px;
+	padding-right:175px;
+	width: 31px;
+	height: 25px;
+	color:rgba(255,255,255,0.9);
+}
+
+/* 当条目被选中时 */
+QListView::item:selected {
+	border:2px solid #6a6ea9;
+}
+
+/* 当条目被选中,并且不是有效的 */
+QListView::item::selected:!active {
+	background:qlineargradient(x1:0, y1:0,x2:1,y2:0, stop:0 #6a6ea9, stop:1 #888dd9);
+}
+
+/* 鼠标县浮在条目上 */
+QListView::item::hover {
+	background:qlineargradient(x1:0, y1:0,x2:1,y2:0, stop:0 #000000, stop:1 #FFFFFF);
+}
+
+/*设置滚动条背景*/
+QListWidget QScrollBar
+{
+    background : #efefef;
+}
+/*设置滚动条样式*/
+QScrollBar::handle{
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(180,180,180,0.8);
+    margin: 2px 3px 2px 3px;
+}

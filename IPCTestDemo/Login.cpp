@@ -3,7 +3,8 @@
 #include "GlobleVar.h"
 #include <QMessageBox>
 #include <QtNetwork>
-#include "Mesjob.h"
+#include <QDesktopWidget>
+//#include "Mesjob.h"
 
 Login::Login(QWidget *parent)
 	: QWidget(parent)
@@ -18,10 +19,19 @@ Login::~Login()
 
 void Login::Init()
 {
+	m_mousePressed = false;
 	//ui.objadvcfg->setEnabled(false);
-	setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
-	setFixedSize(this->width(), this->height());	
-	CpcLogs::init_log((severity_levels)7, (severity_levels)7);
+	ui.objlocalip->setView(new QListView());
+	setWindowFlags(Qt::FramelessWindowHint | Qt::Window | Qt::WindowSystemMenuHint | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+	//setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+	//setFixedSize(this->width(), this->height());
+	this->setFixedSize(486, 646);
+	QDesktopWidget *desktop = QApplication::desktop();
+	move((desktop->width() - this->width()) / 2, (desktop->height() - this->height()) / 2);
+	//ui.objLogo->setFixedWidth(426);
+	CpcLogs::init_log(slog_debug, slog_debug);
+	QString ss = QString::fromLocal8Bit("\n软件启动\n");
+	CPCLOG_INFO << ss.toStdString();
 	initStyle();
 	m_bShowIP = false;
 	m_bMesConn = false;
@@ -29,15 +39,16 @@ void Login::Init()
 	ui.groupBox->setVisible(false);
 	this->layout()->setSizeConstraint(QLayout::SetMinimumSize);
 	this->setFixedHeight(0);
-	ui.objLoginStatus->setStyleSheet("background-color:#64A600;");
+	//ui.objLoginStatus->setStyleSheet("background-color:#64A600;");
 	ui.objadvcfg->setText(QStringLiteral("高级>>"));
-	ui.objLogo->setPixmap(QPixmap(":/IPCTestDemo/Resources/logo1.png"));
+	//ui.objLogo->setPixmap(QPixmap(":/IPCTestDemo/Resources/logo_slices/logo.png"));
 	
 	InitPara();
 	getLocalIP();
 	
 	std::shared_ptr<GlobleVar> gInstance = GlobleVar::GetInstance();
  	m_ptrCmd = std::shared_ptr<ParsingCmd>(new ParsingCmd());
+	m_ptrMes = std::shared_ptr<Mesjob>(new Mesjob());
  	gInstance->setCmdObject(m_ptrCmd);
  	gInstance->m_stCommonInfo.strconnect = "与Mes未连接";
 	bindSignalSlot();
@@ -47,13 +58,14 @@ void Login::Init()
 
 void Login::initStyle()
 {
-	QFile styleFile(":/Portable/Resources/style.qss");
+	QFile styleFile(":/IPCTestDemo/Resources/login.qss");
 	if (!styleFile.open(QIODevice::ReadOnly))
 	{
 		//CPCLOG_WARNING << "open style file error, style file path:" + styleFile.fileName().toStdString();
 		return;
 	}
 	this->setStyleSheet(styleFile.readAll());
+	//qApp->setStyleSheet(styleFile.readAll());
 	styleFile.close();
 }
 
@@ -64,6 +76,7 @@ void Login::InitPara()
 	ui.objaccount->setText(QString::fromStdString(ptr->m_stCommonInfo.strUsername));
 	ui.objpsw->setText(QString::fromStdString(ptr->m_stCommonInfo.strPsw));
 	ui.objrescode->setText(QString::fromStdString(ptr->m_stCommonInfo.iResCode));
+	ui.objversion->setText(QString::fromStdString(ptr->m_stCommonInfo.firmwareVersion));
 	ui.objautologin->setChecked(ptr->m_stCommonInfo.iAutoLogin);
 	ui.objServerip->setText(QString::fromStdString(ptr->m_stCommonInfo.strRemoteIP));
 	ui.objlocalip->setCurrentText(QString::fromStdString(ptr->m_stCommonInfo.strLocalIP));
@@ -76,9 +89,9 @@ void Login::bindSignalSlot()
 	bl = connect(ui.objquit, SIGNAL(clicked()), this, SLOT(slot_quit()));
 	bl = connect(ui.objlocalip, SIGNAL(clicked()), this, SLOT(slot_updateLIP()));
 	bl = connect(ui.objautologin, SIGNAL(toggled(bool)), this, SLOT(slot_autoLogin(bool)));
-	bl = connect(ui.objtest, SIGNAL(clicked()), this, SLOT(slot_test()));
-	bl = connect(m_ptrCmd.get()->m_ptrMes.get(), SIGNAL(mesConn(bool, QString)), this, SLOT(slot_mesConn(bool, QString)));
-	bl = connect(m_ptrCmd.get(), SIGNAL(mesloginStatus(bool)), this, SLOT(slot_loginStatus(bool)));
+	bl = connect(ui.objtest, SIGNAL(clicked()), this, SLOT(slot_login()));
+	bl = connect(m_ptrMes.get(), SIGNAL(mesConn(bool, QString)), this, SLOT(slot_mesConn(bool, QString)));
+	//bl = connect(this, SIGNAL(mesloginStatus(bool)), this, SLOT(slot_loginStatus(bool)));
 }
 
 void Login::getLocalIP()
@@ -89,25 +102,22 @@ void Login::getLocalIP()
 		if (addr.protocol() == QAbstractSocket::IPv4Protocol)
 			ui.objlocalip->addItem(addr.toString());
 	}
-	QString strname = QHostInfo::localHostName();
-	QHostInfo info = QHostInfo::fromName(strname);
-	foreach (QHostAddress addr, info.addresses())
-	{
-		if (addr.protocol() == QAbstractSocket::IPv4Protocol)
-			ui.objlocalip->addItem(addr.toString());
-	}
+// 	QString strname = QHostInfo::localHostName();
+// 	QHostInfo info = QHostInfo::fromName(strname);
+// 	foreach (QHostAddress addr, info.addresses())
+// 	{
+// 		if (addr.protocol() == QAbstractSocket::IPv4Protocol)
+// 			ui.objlocalip->addItem(addr.toString());
+// 	}
 }
 
 void Login::login()
 {
-	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
-	if (nullptr == ptr->m_cmdObject)
-		return;
-	ptr->m_stCommonInfo.strUsername = ui.objaccount->text().toStdString();
-	ptr->m_stCommonInfo.strPsw = ui.objpsw->text().toStdString();
-	ptr->m_stCommonInfo.iAccess = 0;
-
-//	ptr->m_cmdObject->ParsCmd(0, 0, CMD_CTRL_LOGIN);
+	this->hide();
+	if (nullptr == m_xb)
+		m_xb = std::make_shared<AddTestItemDialog>();
+	m_xb->show();
+	m_xb->raise();
 }
 
 void Login::slot_advcfg()
@@ -116,7 +126,12 @@ void Login::slot_advcfg()
 	if (m_bShowIP)
 	{
 		ui.objadvcfg->setText(QStringLiteral("高级<<"));
-		ui.groupBox->setVisible(true);		
+		ui.groupBox->setVisible(true);
+		int w = this->width();
+		int h = this->height();
+ 		adjustSize();
+// 		w = this->width();
+// 		h = this->height();
 	}
 	else
 	{
@@ -137,7 +152,7 @@ void Login::slot_login()
 
 void Login::slot_quit()
 {
-	GlobleVar::GetInstance()->m_iLogin = 7;
+	//GlobleVar::GetInstance()->m_iLogin = 7;
 	this->close();
 }
 
@@ -148,12 +163,13 @@ void Login::slot_test()
 	ptr->m_stCommonInfo.strUsername = ui.objaccount->text().toStdString();
 	ptr->m_stCommonInfo.strPsw = ui.objpsw->text().toStdString();
 	ptr->m_stCommonInfo.iResCode = ui.objrescode->text().toStdString();
+	ptr->m_stCommonInfo.firmwareVersion = ui.objversion->text().toStdString();
 	ptr->m_stCommonInfo.strLocalIP = ui.objlocalip->currentText().toStdString();
 	ptr->m_stCommonInfo.strRemoteIP = ui.objServerip->text().toStdString();
 	std::shared_ptr<ParsingCmd> ptrCmd = ptr->m_cmdObject;
 	if (nullptr == ptrCmd)
 		return;
-	ptrCmd->mesConnect();
+	m_ptrMes->common_login();
 
 	//测试使用
 // 	this->hide();
@@ -175,12 +191,39 @@ void Login::slot_updateLIP()
 	getLocalIP();
 }
 
+void Login::mouseMoveEvent(QMouseEvent *e)
+{
+	if (m_mousePressed && (e->buttons() && Qt::LeftButton) /*&& !m_bmax*/)
+	{
+		// delta 相对偏移量, 
+		QPoint delta = e->globalPos() - m_poStartPosition;
+		move(m_poFramePosition + delta);
+		e->accept();
+	}
+}
+
+void Login::mousePressEvent(QMouseEvent *e)
+{
+	if (e->button() == Qt::LeftButton)
+	{
+		m_mousePressed = true;
+		m_poStartPosition = e->globalPos();
+		m_poFramePosition = frameGeometry().topLeft();
+		e->accept();
+	}
+}
+
+void Login::mouseReleaseEvent(QMouseEvent *e)
+{
+	m_mousePressed = false;
+}
+
 void Login::slot_mesConn(bool b, QString str)
 {
 	if (b)
 	{
 		ui.objLoginStatus->setText(str);
-		ui.objLoginStatus->setStyleSheet("background-color:#64A600;");
+		//ui.objLoginStatus->setStyleSheet("background-color:#64A600;");
 		m_bMesConn = true;
 		GlobleVar::GetInstance()->savepara(GlobleVar::GetInstance()->m_strXmlCfgPath.toStdString());
 
@@ -189,24 +232,7 @@ void Login::slot_mesConn(bool b, QString str)
 	else
 	{
 		ui.objLoginStatus->setText(str);
-		ui.objLoginStatus->setStyleSheet("background-color:#A23400;");
+		//ui.objLoginStatus->setStyleSheet("background-color:#A23400;");
 		m_bMesConn = false;
-	}
-}
-
-void Login::slot_loginStatus(bool iStatus)
-{
-	if (iStatus)
-	{
-		this->hide();
-		if(nullptr == m_xb)
-			m_xb = std::make_shared<AddTestItemDialog>();
-		m_xb->show();
-		m_xb->raise();
-	}
-	else
-	{
-		ui.objLoginStatus->setText(QString::fromStdString(strLogin[iStatus]));
-		ui.objLoginStatus->setStyleSheet("background-color:#A23400;");
 	}
 }

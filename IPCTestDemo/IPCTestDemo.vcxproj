@@ -16,7 +16,7 @@
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.17763.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.17763.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
-    <ProjectName>IPCTestDemo_616</ProjectName>
+    <ProjectName>IPCTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -65,15 +65,22 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;.\CustomBtn;$(boost_1_70_0)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(boost_1_70_0)\stage\lib</AdditionalLibraryDirectories>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN32_WINNT=0x0601;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -104,6 +111,7 @@
   <ItemGroup>
     <ClCompile Include="AddTestItemDialog.cpp" />
     <ClCompile Include="autoprompt.cpp" />
+    <ClCompile Include="BigWindowClass.cpp" />
     <ClCompile Include="BusinessLogic.cpp" />
     <ClCompile Include="ButtonEdit.cpp" />
     <ClCompile Include="Cpclog.cpp" />
@@ -126,7 +134,10 @@
     <ClCompile Include="GlobleVar.cpp" />
     <ClCompile Include="IPCMessage.pb.cc" />
     <ClCompile Include="IPCTestDemo.cpp" />
+    <ClCompile Include="MainWidgets.cpp" />
     <ClCompile Include="Mesjob.cpp" />
+    <ClCompile Include="MLabel.cpp" />
+    <ClCompile Include="MovingWidget.cpp" />
     <ClCompile Include="MyFFmpeg.cpp" />
     <ClCompile Include="ParsingCmd.cpp" />
     <ClCompile Include="projectlistwidget.cpp" />
@@ -135,21 +146,33 @@
     <ClCompile Include="TCPClient.cpp" />
     <ClCompile Include="threadpool\ThreadPool.cpp" />
     <ClCompile Include="TitleGui.cpp" />
+    <ClCompile Include="WifiTestWidget.cpp" />
     <ClCompile Include="XmlClass.cpp" />
     <QtRcc Include="IPCTestDemo.qrc" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="IPCMessage.proto" />
+    <None Include="Resources\addItem.qss" />
+    <None Include="Resources\IPCTestDemo.qss" />
+    <None Include="Resources\login.qss" />
+    <None Include="Resources\MainWidget.qss" />
+    <None Include="Resources\TitleGui.qss" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="autoprompt.h" />
     <QtMoc Include="ButtonEdit.h" />
+    <QtMoc Include="BigWindowClass.h" />
     <ClInclude Include="Cpclog.h" />
     <QtMoc Include="Mesjob.h" />
     <QtMoc Include="MyFFmpeg.h" />
+    <QtMoc Include="MainWidgets.h" />
+    <QtMoc Include="MLabel.h" />
+    <QtMoc Include="MovingWidget.h" />
     <ClInclude Include="MyHelper.h" />
     <QtMoc Include="RTSP_Player.h" />
+    <QtMoc Include="WifiTestWidget.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="XmlClass.h" />
     <QtMoc Include="TitleGui.h" />
     <QtMoc Include="CustomBtn\cpc_combobox.h" />
@@ -189,10 +212,17 @@
   <ItemGroup>
     <QtUic Include="AddTestItemDialog.ui" />
     <QtUic Include="autoprompt.ui" />
+    <QtUic Include="BigWindowClass.ui" />
     <QtUic Include="Login.ui" />
     <QtUic Include="IPCTestDemo.ui" />
+    <QtUic Include="MainWidgets.ui" />
+    <QtUic Include="MovingWidget.ui" />
     <QtUic Include="prompt.ui" />
     <QtUic Include="TitleGui.ui" />
+    <QtUic Include="WifiTestWidget.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="IPCTest.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -3,5 +3,24 @@
         <file>Resources/fontawesome-webfont.ttf</file>
         <file>Resources/logo.png</file>
         <file>Resources/logo1.png</file>
+        <file>Resources/login.qss</file>
+        <file>Resources/addItem.qss</file>
+        <file>Resources/IPCTestDemo.qss</file>
+        <file>Resources/MainWidget.qss</file>
+        <file>Resources/TitleGui.qss</file>
+        <file>Resources/logo2.png</file>
     </qresource>
+    <qresource prefix="/new/login">
+        <file>Resources/login/warning.png</file>
+        <file>Resources/login/logo_slices/logo.png</file>
+        <file>Resources/login/arrow.png</file>
+        <file>Resources/icon/default.png</file>
+        <file>Resources/icon/hover.png</file>
+        <file>Resources/icon/press.png</file>
+    </qresource>
+    <qresource prefix="/new/IPCTestDemo"/>
+    <qresource prefix="/new/MainWidgets">
+        <file>Resources/icon/close_icon.png</file>
+    </qresource>
+    <qresource prefix="/new/TitleGui"/>
 </RCC>

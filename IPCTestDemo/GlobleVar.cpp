@@ -9,9 +9,11 @@ GlobleVar::GlobleVar()
 void GlobleVar::init()
 {
 	m_stCommonInfo.iLostPack = 0;
-	m_iLogin = 7;
+	//m_iLogin = 7;
 	m_strXmlCfgPath = "./config/Para.xml";
+	m_strXmlListPath = "./config/TestList.xml";
 	loadpara(m_strXmlCfgPath.toStdString());
+	loadlist(m_strXmlListPath.toStdString());
 }
 
 int GlobleVar::comparTestname(QString str)
@@ -61,11 +63,23 @@ int GlobleVar::comparTestname(QString str)
 	else if (str.compare("keytest") == 0) {
 		return CMD_KEYTEST;
 	}
+	else if (str.compare("voipkeytest") == 0) {
+		return CMD_VOIPKEYTEST;
+	}
 	else if (str.compare("tftest") == 0) {
 		return CMD_TFTEST;
 	}
 	else if (str.compare("ldrtest") == 0) {
 		return CMD_LDRTEST;
+	}
+	else if (str.compare("ptztest") == 0) {
+		return CMD_PTZTEST;
+	}
+	else if (str.compare("wifiscanresults") == 0) {
+		return CMD_WIFISCANRESULT;
+	}
+	else if (str.compare("video") == 0) {
+		return CMD_VIDEO;
 	}
 	else
 	{
@@ -120,11 +134,20 @@ QString GlobleVar::TestProjectName(QString str)
 	else if (str.compare("keytest") == 0) {
 		return QString::fromLocal8Bit("测试rest按键");
 	}
+	else if (str.compare("voipkeytest") == 0) {
+		return QString::fromLocal8Bit("测试通话按键");
+	}
 	else if (str.compare("tftest") == 0) {
 		return QString::fromLocal8Bit("测试TF卡");
 	}
 	else if (str.compare("ldrtest") == 0) {
 		return QString::fromLocal8Bit("测试光敏");
+	}
+	else if (str.compare("ptztest") == 0) {
+		return QString::fromLocal8Bit("ptz马达复位");
+	}
+	else if (str.compare("video") == 0) {
+		return QString::fromLocal8Bit("图像清晰度及脏点确认");
 	}
 	else
 	{
@@ -139,12 +162,24 @@ void GlobleVar::setCmdObject(std::shared_ptr<ParsingCmd> cmd)
 
 void GlobleVar::savepara(std::string str)
 {
-	XmlClass xml(m_strXmlCfgPath.toStdString());
+	XmlClass xml(str);
 	xml.WriteParaXml();
+}
+
+void GlobleVar::savelist(std::string str)
+{
+	XmlClass xml(str);
+	xml.WriteListXml();
 }
 
 void GlobleVar::loadpara(std::string str)
 {
-	XmlClass xml(m_strXmlCfgPath.toStdString());
+	XmlClass xml(str);
 	xml.ReadParaXml();
+}
+
+void GlobleVar::loadlist(std::string str)
+{
+	XmlClass xml(str);
+	xml.ReadListXml();
 }

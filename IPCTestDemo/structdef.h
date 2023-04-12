@@ -16,20 +16,17 @@ const std::string strWorkDir[] = { "\\WorkDir", "\\IQ", "\\Audio", "\\Estimate",
 #define		A_OKAY			0xabcdef02
 #define		A_START			0xabcdef03
 #define		A_RESULT		0xabcdef04
+
+#define		A_CONTROL		0xabcdefee
 #define		MAX_PAYLOAD		244
 
 #define		MAX_TURN_COUNT			 1
 //项目名称
-// enum eProjectName
-// {
-// 	E_CPC2018 = 0,		
-// 	E_CPC2024,
-// 	E_CPC2031,
-// 	E_CPC2032,
-// 	E_CPC2108,
-// 	E_CPC2026,
-// 	E_CPC2028
-// };
+enum eProjectName
+{
+	E_TC616 = 0,		
+	E_TC216
+};
 //测试任务
 enum eCtrlCmd
 {
@@ -49,15 +46,21 @@ enum eCtrlCmd
 	CMD_IRNVTEST,			//测试红外夜视
 	CMD_FULLCOLORNV,		//测试全彩夜视
 	CMD_KEYTEST,			//测试Rest按键
+	CMD_VOIPKEYTEST,		//测试通话按键
 	CMD_TFTEST,				//测试TF卡
 	CMD_LDRTEST,			//测试光敏
+	CMD_PTZTEST,			//PTZ马达测试
+	CMD_WIFISCANRESULT,		//获取WiFi站点测试
+	CMD_VIDEO,				//影像清晰度及脏点确认
+	CMD_RESET,				//批量升级模式退出
 	CMD_COUNT
 };
 
 const std::string strTcpCmd[] = {
 	"获取设备信息","获取直播播放地址","读运营商信息","退出厂测模式","设置时间","写运营商信息",
 	"恢复出厂设置","开关白光灯","开关红外灯","开关IRCUT","开关网络LED","测试扬声器",
-	"测试麦克风","测试红外夜视","测试全彩夜视","测试Rest按键","测试TF卡","测试光敏"
+	"测试麦克风","测试红外夜视","测试全彩夜视","测试Rest按键","测试通话按键","测试TF卡","测试光敏",
+	"PTZ马达测试","获取WiFi站点测试","影像清晰度及脏点确认","批量升级模式退出"
 };
 //连接服务器状态
 enum eSerConnState
@@ -91,6 +94,15 @@ enum eResult
 	Result_Timeout,
 	Result_Testing
 };
+//ptz
+enum ePtz
+{
+	ptz_up = 0x00,
+	ptz_down,
+	ptz_left,
+	ptz_right,
+	ptz_zero
+};
 
 const std::string strLogin[] = {
 	"登录成功", "用户名不存在", "密码错误", "权限不够", "账户已登录"
@@ -111,11 +123,15 @@ typedef struct st_common_info {
 	std::string		strRemoteIP;				//服务端IP地址 0:tcp 1:udp
 	uint8_t         iAutoLogin;                 //自动登录
 	std::string		strconnect;					//连接状态
-	uint8_t         itcpConn;                   //TCP连接成功 1：成功 0：失败
+	bool			itcpConn;                   //TCP连接成功 1：成功 0：失败
 	uint8_t         iudpConn;                   //UDP连接成功 1：成功 0：失败
 	uint32_t		iLostPack;					//丢包数量
 	std::string		iWebHostPort;				//web信息
 	std::string		iUrl;						//直播播放地址
+	std::string		wifiName;					//WiFi名
+	std::string		wifiPassWD;					//WiFi登录密码
+	int				SignalStrength;				//WiFi信号强度
+	std::string		firmwareVersion;			//固件版本
 	st_common_info() :itcpConn(0), iudpConn(0){};
 }st_common_info, *pst_common_info;
 
@@ -166,6 +182,7 @@ typedef struct st_20_result {
 //mes40接口回复信息
 typedef struct st_40_result {
 	std::string				WholeDeviceCode;//WholeDeviceCode
+	std::string				ProductSN;
 	std::string				IMEI;//主IMEI
 	std::string				SubIMEI;//副IMEI
 	std::string				Mac;//Mac
@@ -180,6 +197,7 @@ typedef struct st_40_result {
 	std::string				DSN;//DSN
 	std::string				UserName;//UserName
 	std::string				UserPass;//UserPass
+	std::string				CiphertextPassword;
 	std::string				WirelessNetName;//WirelessNetName
 	std::string				WlanPass;//WlanPass
 	std::string				WirelessNetName2;//WirelessNetName2
@@ -193,11 +211,23 @@ typedef struct st_40_result {
 	std::string				OrderNoAllocation;//OrderNoAllocation
 	std::string				STBNO;//STBNO
 	std::string				MFRS;//MFRS
+	std::string				HW;
 	std::string				SN;//SN
 	std::string				CMEI;//CMEI
+	std::string				ProductNameCode;
+	std::string				ManufacturerName;
+	std::string				VendorCode;
+	std::string				EquipmentModel;
+	std::string				EquipmentCode;
+	std::string				CharacteristicCode;
+	std::string				AreaCode;//地区码
+	std::string				DateCode;
 	std::string				QRCode;//QRCode
 	std::string				DevKey;//DevKey
-	std::string				AreaCode;//地区码
+	std::string				DM_PASSWD;
+	std::string				DM_APPKEY;
+	std::string				PCBASN;
+	std::string				EN;
 	std::string				ReturnValue;//执行结果  0：表示执行失败   1：表示执行成功
 	std::string				ReturnMessage;//执行成功或失败时的返回信息
 

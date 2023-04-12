@@ -5,8 +5,8 @@
 #include "QRect"
 #include "QMouseEvent"
 
-#define WIN_WIDTH  1360
-#define WIN_HEIGHT  960
+#define WIN_WIDTH  1440
+#define WIN_HEIGHT  900
 
 #define MAX_ICON 0xf096
 #define MID_ICON 0xf079
@@ -20,7 +20,8 @@ enum layoutChoose {
 class TitleGui : public QWidget
 {
 	Q_OBJECT
-
+private:
+	void initStyle();
 public:
 	TitleGui(QWidget *parent = Q_NULLPTR);
 	~TitleGui();
@@ -38,7 +39,7 @@ public:
 	void showEvent(QShowEvent *event);
 	void mouseDoubleClickEvent(QMouseEvent *event); 
 
-	void addWidget(QWidget* widget, layoutChoose lr);
+	//void addWidget(QWidget* widget, layoutChoose lr);
 private:
 	Ui::TitleGui ui;
 

@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
 	<login>
-		<para account="wmssync" psw="wmssync" autolog="0" access="0" rescode="3FA01-F7-01"/>
+		<para account="wmssync" psw="wmssync" autolog="0" access="0" rescode="4FA01-F7-01"/>
 	</login>
+	<Firmware>
+		<firmware firmwareVersion="V1.1.05.Audio-00-221107-230313"/>
+	</Firmware>
 	<Comm>
-		<tcppara lip="192.168.11.22" rip="192.168.11.88" lport="4000" rport="10801"/>
+		<tcppara lip="192.168.168.117" rip="192.168.168.88" lport="4000" rport="10801"/>
 		<url ipcurl=""/>
 	</Comm>
+	<Wifi>
+		<wifi wifiname="TP-LINK_9779" wifipasswd="99999999" dbm="-60"/>
+	</Wifi>
 	<webPara>
-		<web hostport="http://124.221.240.243:20984"/>
+		<web hostport="http://172.16.6.6:10024"/>
 	</webPara>
 </root>

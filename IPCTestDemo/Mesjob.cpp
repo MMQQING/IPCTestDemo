@@ -9,6 +9,7 @@ Mesjob::Mesjob()
 	auto scheme_host_port = gVar->m_stCommonInfo.iWebHostPort;
 #endif
 	cli = std::shared_ptr<httplib::Client>(new httplib::Client(scheme_host_port));
+	qRegisterMetaType<QMap<QString, QString>>("QMap<QString ,QString>");
 }
 
 Mesjob::~Mesjob()
@@ -99,7 +100,7 @@ bool Mesjob::common_login()
 	std::stringstream stream;
 	write_json(stream, pItem);
 //	std::string str1 = stream.str();
-//遍历结构体代码test
+//	遍历结构体代码test
 	st_login_result* P_Member = &gVar->m_stLoginInfo;		//指向结构体的指针
 	std::string* P = (std::string*)P_Member;				//结构体指针强制转换为string类型
 
@@ -208,6 +209,7 @@ bool Mesjob::common_login()
 //通过CMEI查询
 void Mesjob::common_get20info(QString CMEIstr)
 {
+	QVariant DataVar;
 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
 	using namespace boost::property_tree;
 	ptree pt;
@@ -235,7 +237,7 @@ void Mesjob::common_get20info(QString CMEIstr)
 	write_json(stream, pItem);
 	std::string str1 = stream.str();
 	//遍历结构体代码test
-	st_20_result* P_Member = &gVar->m_st20Info;		//指向结构体的指针
+	st_20_result* P_Member = &m_st20Info;			//指向结构体的指针
 	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
 
 	//发送给web
@@ -248,7 +250,7 @@ void Mesjob::common_get20info(QString CMEIstr)
 			std::string str = pt.get<std::string>("document.ReturnValue");
 			if (!atoi(str.c_str())) {
 				str = pt.get<std::string>("document.ReturnMessage");
-				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()));
+				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()).simplified(), DataVar);
 				CPCLOG_ERROR << str;
 				return;
 			}
@@ -259,14 +261,17 @@ void Mesjob::common_get20info(QString CMEIstr)
 					(*P++) = i->second.get_value<std::string>();
 				}
 				//TEST
-				emit mes20Res(true, QString::fromLocal8Bit("校验成功"));
+				QMap<QString, QString> _map;
+				_map.insert("MOCode", QString::fromStdString(m_st20Info.MOCode));
+				DataVar.setValue(_map);
+				emit mes20Res(true, QString::fromLocal8Bit("校验成功"), DataVar);
 				common_get40info();
 				return;
 			}
 		}
 	}
 	else {
-		emit mes20Res(false, QString::fromLocal8Bit("请修改MES地址..."));
+		emit mes20Res(false, QString::fromLocal8Bit("请修改MES地址..."), DataVar);
 		CPCLOG_ERROR << QString::fromLocal8Bit("请修改MES地址...").toStdString();
 		return;
 	}
@@ -275,10 +280,10 @@ void Mesjob::common_get20info(QString CMEIstr)
 
 void Mesjob::common_get40info()
 {
-	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
+	QVariant DataVar;
 	using namespace boost::property_tree;
 	ptree pt;
-	pt.put<std::string>("document.LotId", ptr->m_st20Info.LotId);
+	pt.put<std::string>("document.LotId", m_st20Info.LotId);
 	xml_writer_settings <std::string > settings('\t', 1);
 	std::stringstream str_stream;
 	write_xml(str_stream, pt);
@@ -295,7 +300,7 @@ void Mesjob::common_get40info()
 	write_json(stream, pItem);
 	//	std::string str1 = stream.str();
 	//遍历结构体代码test
-	st_40_result* P_Member = &gVar->m_st40Info;		//指向结构体的指针
+	st_40_result* P_Member = &m_st40Info;		//指向结构体的指针
 	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
 
 	//发送给web
@@ -308,29 +313,46 @@ void Mesjob::common_get40info()
 			std::string str = pt.get<std::string>("document.ReturnValue");
 			if (!atoi(str.c_str())) {
 				str = pt.get<std::string>("document.ReturnMessage");
-				emit mes40Res(false, QString::fromLocal8Bit(str.c_str()));
+				emit mes40Res(false, QString::fromLocal8Bit(str.c_str()).simplified(), DataVar);
 				CPCLOG_ERROR << str;
 				return;
 			}
 			else
 			{
-				gVar->m_st40Info.Mac = pt.get<std::string>("document.Mac");
-				gVar->m_st40Info.SN = pt.get<std::string>("document.SN");
-				//gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.DeviceSerialNumber");
-				gVar->m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.SN");
-				gVar->m_st40Info.CMEI = pt.get<std::string>("document.CMEI");
-				//gVar->m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
-				//gVar->m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
-				gVar->m_st40Info.UserPass = pt.get<std::string>("document.CiphertextPassword");
-				gVar->m_st40Info.DevKey = pt.get<std::string>("document.UserPass");
+				auto child = pt.get_child("document");
+				for (auto i = child.begin(); i != child.end(); ++i) {
+					(*P++) = i->second.get_value<std::string>();
+				}
+				/*
+				m_st40Info.Mac = pt.get<std::string>("document.Mac");
+				m_st40Info.SN = pt.get<std::string>("document.SN");
+				//m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.DeviceSerialNumber");
+				m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.SN");
+				m_st40Info.CMEI = pt.get<std::string>("document.CMEI");
+				//m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
+				//m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
+				m_st40Info.UserPass = pt.get<std::string>("document.CiphertextPassword");
+				m_st40Info.DevKey = pt.get<std::string>("document.UserPass");
+				*/
+				QMap<QString, QString> _map;
+				_map.insert("Mac", QString::fromStdString(m_st40Info.Mac));
+				_map.insert("SN", QString::fromStdString(m_st40Info.SN));
+				_map.insert("DeviceSerialNumber", QString::fromStdString(m_st40Info.DeviceSerialNumber));
+				_map.insert("CiphertextPassword", QString::fromStdString(m_st40Info.CiphertextPassword));
+				_map.insert("CMEI", QString::fromStdString(m_st40Info.CMEI));
+				_map.insert("UserPass", QString::fromStdString(m_st40Info.UserPass));
+				_map.insert("DevKey", QString::fromStdString(m_st40Info.DevKey));
+				_map.insert("PCBASN", QString::fromStdString(m_st40Info.PCBASN));
+				
+				DataVar.setValue(_map);
 				//TEST
-				emit mes40Res(true, QString::fromLocal8Bit("信息获取成功"));
+				emit mes40Res(true, QString::fromLocal8Bit("信息获取成功"), DataVar);
 				return;
 			}
 		}
 	}
 	else {
-		emit mes40Res(false, QString::fromLocal8Bit("请修改MES地址..."));
+		emit mes40Res(false, QString::fromLocal8Bit("请修改MES地址..."), DataVar);
 		CPCLOG_ERROR << QString::fromLocal8Bit("请修改MES地址...").toStdString();
 		return;
 	}
@@ -344,7 +366,7 @@ void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 	ptree pt;
 	pt.put<std::string>("document.IsTransferMO", std::to_string(0));
 	pt.put<std::string>("document.MOId", "");
-	pt.put<std::string>("document.LotId", ptr->m_st20Info.LotId);
+	pt.put<std::string>("document.LotId", m_st20Info.LotId);
 	pt.put<std::string>("document.LineId", ptr->m_stLoginInfo.LineId);
 	pt.put<std::string>("document.ResId", ptr->m_stLoginInfo.ResId);
 	pt.put<std::string>("document.ShiftTypeId", ptr->m_stLoginInfo.ShiftTypeId);
@@ -378,21 +400,21 @@ void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 			std::string str = pt.get<std::string>("document.ReturnValue");
 			if (!atoi(str.c_str())) {
 				str = pt.get<std::string>("document.ReturnMessage");
-				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()));
+				emit mes30Res(false, QString::fromLocal8Bit(str.c_str()).simplified());
 				CPCLOG_ERROR << str;
 				return;
 			}
 			else
 			{
 				str = pt.get<std::string>("document.ReturnMessage");
-				emit mes20Res(true, QString::fromLocal8Bit(str.c_str()));
+				emit mes30Res(true, QString::fromLocal8Bit(str.c_str()).simplified());
 				//emit mes20Res(true, QString::fromLocal8Bit("上传成功"));
 				return;
 			}
 		}
 	}
 	else {
-		emit mes20Res(false, QString::fromLocal8Bit("请修改MES地址..."));
+		emit mes30Res(false, QString::fromLocal8Bit("请修改MES地址..."));
 		CPCLOG_ERROR << QString::fromLocal8Bit("请修改MES地址...").toStdString();
 		return;
 	}

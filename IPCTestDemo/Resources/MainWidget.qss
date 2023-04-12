@@ -1,0 +1,78 @@
+QWidget#main_widget,#bottom_widget
+{
+    background:#212121;
+	color: #FFFFFF;
+}
+#groupBox_3>QLabel
+{
+	max-height:21px;
+	font-size: 12px;
+	background: rgba(102,102,102,0.25);
+	border-radius: 2px;
+	color:rgba(255,255,255,0.2);
+}
+#groupBox_3>#info_label
+{
+	height: 22px;
+	font-size: 16px;
+	color: #22D3EE;
+	background:transparent;
+}
+QLabel
+{
+	height: 20px;
+	font-size: 14px;
+	color: #FFFFFF;
+}
+QLabel#label,#label_2
+{
+	height: 22px;
+	font-size: 16px;
+	color: #22D3EE;
+}
+QLabel#info_label
+{
+	font-size: 14px;
+	height: 20px;
+	color: #20FCFF;
+}
+QPushButton
+{
+	height: 24px;
+	background: rgba(102,102,102,0.25);
+	border-radius: 2px;
+	border: 1px solid #999999;
+	font-size: 12px;
+    border: 1px solid #999999;
+	color: #999999;
+}
+QPushButton:enabled:hover{ 
+    color: rgba(0,0,0,0.9);
+    background: #FFFFFF;
+}
+QPushButton#closeBigButton
+{
+	border:0px solid #999999;
+	height: 28px;
+	width: 28px;
+	background-image: url(:/new/MainWidgets/Resources/icon/close_icon.png);
+}
+QPushButton#m_testButton
+{
+	width: 80px;
+}
+QLineEdit
+{
+	color:#F0F0F0;
+	height: 24px;
+	border-radius: 2px;
+	border: 1px solid #999999;
+	background:#212121;
+}
+QLineEdit:disabled
+{
+	height: 24px;
+	background: rgba(102,102,102,0.25);
+	border-radius: 2px;
+	border: 1px solid transparent;
+}

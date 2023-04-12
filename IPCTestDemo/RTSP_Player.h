@@ -24,11 +24,13 @@ signals:
 public slots:
 	void PlayerStart();
 	void PlayerStop();
+	void upConnect(bool);
 
 private:
 	volatile bool   m_stopped;				// 停止播放标识，为true时停止播放，退出播放循环
 	QString         m_playerUrl;			// 播放url
 	MyFFmpeg        *m_ffmpeg;				// MyFFmepg指针
+	bool			connstate;				// TCP连接状态
 };
 
 #endif // RTSP_PLAYER_H

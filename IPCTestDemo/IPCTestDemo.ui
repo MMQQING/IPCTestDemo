@@ -6,46 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1124</width>
+    <width>321</width>
     <height>900</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>IPCTestDemo</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
-    <widget class="TitleGui" name="widget" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>25</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QWidget" name="widget_3" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
+    <widget class="QWidget" name="widget_4" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -58,323 +44,304 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <item row="0" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>0</number>
+      <item>
+       <widget class="QLabel" name="rtsp_label">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
         </property>
-        <item>
-         <widget class="QWidget" name="widget_4" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <property name="spacing">
+            <number>6</number>
            </property>
            <item>
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <property name="verticalSpacing">
+              <number>6</number>
              </property>
-             <property name="minimumSize">
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_SN">
+               <property name="text">
+                <string>SN</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_IP"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_2">
+                 <property name="text">
+                  <string>连接</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_connect">
+               <property name="text">
+                <string>连接状态</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QWidget" name="PCBASN_widget" native="true"/>
+             </item>
+             <item row="10" column="0">
+              <widget class="QLabel" name="label_UserPass">
+               <property name="text">
+                <string>UserPass</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>设备信息</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QLineEdit" name="lineEdit_SN"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="MLabel" name="lineEdit_connect">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="label_MAC">
+               <property name="text">
+                <string>MAC</string>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="1">
+              <widget class="QLineEdit" name="lineEdit_DeviceModel"/>
+             </item>
+             <item row="9" column="0">
+              <widget class="QLabel" name="label_DevKey">
+               <property name="text">
+                <string>DevKey</string>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="1">
+              <widget class="QLineEdit" name="lineEdit_DevKey"/>
+             </item>
+             <item row="10" column="1">
+              <widget class="QLineEdit" name="lineEdit_UserPass"/>
+             </item>
+             <item row="11" column="1">
+              <widget class="QLineEdit" name="lineEdit_DeviceName"/>
+             </item>
+             <item row="13" column="0">
+              <widget class="QLabel" name="label_DeviceModel">
+               <property name="text">
+                <string>DeviceModel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_CMEI">
+               <property name="text">
+                <string>CMEI</string>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_CPassword">
+               <property name="text">
+                <string>CPassword</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QWidget" name="CMEI_widget" native="true"/>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="label_MOCode">
+               <property name="text">
+                <string>MOCode:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="0">
+              <widget class="QLabel" name="label_AppVersion">
+               <property name="text">
+                <string>AppVersion</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_IP">
+               <property name="text">
+                <string>设备IP</string>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="1">
+              <widget class="QLineEdit" name="lineEdit_AppVersion"/>
+             </item>
+             <item row="8" column="1">
+              <widget class="QLineEdit" name="lineEdit_CPassword"/>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_PCBASN">
+               <property name="text">
+                <string>PCBASN:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QLineEdit" name="lineEdit_MAC"/>
+             </item>
+             <item row="0" column="1">
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_2">
+                 <property name="text">
+                  <string>TextLabel</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="11" column="0">
+              <widget class="QLabel" name="label_DeviceName">
+               <property name="text">
+                <string>DeviceName</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QLineEdit" name="lineEdit_MOCode"/>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
               <size>
-               <width>300</width>
-               <height>0</height>
+               <width>20</width>
+               <height>40</height>
               </size>
              </property>
-             <property name="title">
-              <string>设备信息</string>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QPushButton" name="write_Button">
+               <property name="text">
+                <string>写号</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="compar_Button">
+               <property name="text">
+                <string>比对</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QPushButton" name="default_Button">
+             <property name="text">
+              <string>恢复出厂设置</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_4">
-                <property name="spacing">
-                 <number>6</number>
-                </property>
-                <item>
-                 <layout class="QGridLayout" name="gridLayout_4">
-                  <item row="0" column="2">
-                   <layout class="QHBoxLayout" name="horizontalLayout_3">
-                    <item>
-                     <widget class="QLineEdit" name="lineEdit_IP"/>
-                    </item>
-                    <item>
-                     <widget class="QPushButton" name="pushButton_2">
-                      <property name="text">
-                       <string>连接</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_MAC">
-                    <property name="text">
-                     <string>MAC</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="9" column="0">
-                   <widget class="QLabel" name="label_DeviceName">
-                    <property name="text">
-                     <string>DeviceName</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="6" column="2">
-                   <widget class="QLineEdit" name="lineEdit_UID"/>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QWidget" name="CMEI_widget" native="true"/>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_IP">
-                    <property name="text">
-                     <string>设备IP</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QLineEdit" name="lineEdit_connect"/>
-                  </item>
-                  <item row="7" column="2">
-                   <widget class="QLineEdit" name="lineEdit_DevKey"/>
-                  </item>
-                  <item row="5" column="2">
-                   <widget class="QLineEdit" name="lineEdit_SN"/>
-                  </item>
-                  <item row="10" column="0">
-                   <widget class="QLabel" name="label_AppVersion">
-                    <property name="text">
-                     <string>AppVersion</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="7" column="0">
-                   <widget class="QLabel" name="label_DevKey">
-                    <property name="text">
-                     <string>DevKey</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_connect">
-                    <property name="text">
-                     <string>连接状态</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="11" column="0">
-                   <widget class="QLabel" name="label_DeviceModel">
-                    <property name="text">
-                     <string>DeviceModel</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="9" column="2">
-                   <widget class="QLineEdit" name="lineEdit_DeviceName"/>
-                  </item>
-                  <item row="6" column="0">
-                   <widget class="QLabel" name="label_UID">
-                    <property name="text">
-                     <string>UID</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="AppVersion_label">
-                    <property name="text">
-                     <string>AppVersion</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="10" column="2">
-                   <widget class="QLineEdit" name="lineEdit_AppVersion"/>
-                  </item>
-                  <item row="4" column="2">
-                   <widget class="QLineEdit" name="lineEdit_MAC"/>
-                  </item>
-                  <item row="11" column="2">
-                   <widget class="QLineEdit" name="lineEdit_DeviceModel"/>
-                  </item>
-                  <item row="8" column="2">
-                   <widget class="QLineEdit" name="lineEdit_UserPass"/>
-                  </item>
-                  <item row="8" column="0">
-                   <widget class="QLabel" name="label_UserPass">
-                    <property name="text">
-                     <string>UserPass</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QWidget" name="AppVersion_widget" native="true"/>
-                  </item>
-                  <item row="5" column="0">
-                   <widget class="QLabel" name="label_SN">
-                    <property name="text">
-                     <string>SN</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_CMEI">
-                    <property name="text">
-                     <string>CMEI</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <spacer name="verticalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_4">
-                  <item>
-                   <widget class="QPushButton" name="write_Button">
-                    <property name="text">
-                     <string>写号</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="compar_Button">
-                    <property name="text">
-                     <string>比对</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="default_Button">
-                  <property name="text">
-                   <string>恢复出厂设置</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-                </item>
-               </layout>
-              </item>
-             </layout>
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_3">
-             <property name="minimumSize">
-              <size>
-               <width>300</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="title">
-              <string>测试结果</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_2"/>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QWidget" name="widget_5" native="true">
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <property name="leftMargin">
-            <number>9</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit"/>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>start</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_2">
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="MLabel" name="info_label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QWidget" name="widget_2" native="true">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
     </widget>
    </item>
   </layout>
@@ -382,10 +349,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>TitleGui</class>
-   <extends>QWidget</extends>
-   <header location="global">../../../TitleGui.h</header>
-   <container>1</container>
+   <class>MLabel</class>
+   <extends>QLabel</extends>
+   <header>mlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

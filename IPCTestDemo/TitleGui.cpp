@@ -1,20 +1,34 @@
 #include "TitleGui.h"
 #include "QDesktopWidget"
 #include "QMenuBar"
-
+#include <QScreen>
 TitleGui::TitleGui(QWidget *parent)
 	: QWidget(parent)
 {
 	m_bmax = true;
+	setAttribute(Qt::WA_StyledBackground);
 	ui.setupUi(this);
 	m_location.setWidth(WIN_WIDTH);
 	m_location.setHeight(WIN_HEIGHT);
 	InitMenu();
+	initStyle();
 	InitConnect();	
 }
 
 TitleGui::~TitleGui()
 {
+}
+
+void TitleGui::initStyle()
+{
+	QFile styleFile(":/IPCTestDemo/Resources/TitleGui.qss");
+	if (!styleFile.open(QIODevice::ReadOnly))
+	{
+		//CPCLOG_WARNING << "open style file error, style file path:" + styleFile.fileName().toStdString();
+		return;
+	}
+	this->setStyleSheet(styleFile.readAll());
+	styleFile.close();
 }
 
 void TitleGui::InitMenu()
@@ -134,15 +148,16 @@ void TitleGui::mouseDoubleClickEvent(QMouseEvent *event)
 	on_btnMenu_Max_clicked();
 }
 
-void TitleGui::addWidget(QWidget* widget, layoutChoose lr)
-{
-	if (lr == leftLayout)
-	{
-		ui.leftLayout_widget->addWidget(static_cast<QWidget*>(widget));
-	}
-	else
-	{
-		ui.rightLayout_widget->addWidget(static_cast<QWidget*>(widget));
-	}
-	
-}
+
+// void TitleGui::addWidget(QWidget* widget, layoutChoose lr)
+// {
+// 	if (lr == leftLayout)
+// 	{
+// 		ui.leftLayout_widget->addWidget(static_cast<QWidget*>(widget));
+// 	}
+// 	else
+// 	{
+// 		ui.rightLayout_widget->addWidget(static_cast<QWidget*>(widget));
+// 	}
+// 	
+// }

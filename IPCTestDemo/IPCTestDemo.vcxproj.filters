@@ -48,6 +48,9 @@
     <Filter Include="log">
       <UniqueIdentifier>{8844a968-b578-49ba-9715-bef80a314cd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{41706218-a505-4a51-abf9-2bd47683bfa3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="IPCTestDemo.qrc">
@@ -160,6 +163,21 @@
     <ClCompile Include="ButtonEdit.cpp">
       <Filter>CustomBtn</Filter>
     </ClCompile>
+    <ClCompile Include="MLabel.cpp">
+      <Filter>CustomBtn</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWidgets.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingWidget.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="WifiTestWidget.cpp">
+      <Filter>Source Files\界面模块</Filter>
+    </ClCompile>
+    <ClCompile Include="BigWindowClass.cpp">
+      <Filter>Form Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="load_dll.h">
@@ -198,9 +216,27 @@
     <ClInclude Include="MyHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="IPCMessage.proto" />
+    <None Include="Resources\login.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\addItem.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\IPCTestDemo.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\MainWidget.qss">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Resources\TitleGui.qss">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="IPCTestDemo.h">
@@ -293,6 +329,21 @@
     <QtMoc Include="ButtonEdit.h">
       <Filter>CustomBtn</Filter>
     </QtMoc>
+    <QtMoc Include="MLabel.h">
+      <Filter>CustomBtn</Filter>
+    </QtMoc>
+    <QtMoc Include="MainWidgets.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="MovingWidget.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="WifiTestWidget.h">
+      <Filter>Header Files\界面模块</Filter>
+    </QtMoc>
+    <QtMoc Include="BigWindowClass.h">
+      <Filter>Form Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="IPCTestDemo.ui">
@@ -313,5 +364,22 @@
     <QtUic Include="autoprompt.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="MainWidgets.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MovingWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="WifiTestWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="BigWindowClass.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="IPCTest.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

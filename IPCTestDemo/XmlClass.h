@@ -12,6 +12,8 @@ public:
 	//配置客户端参数
 	void ReadParaXml();
 	void WriteParaXml();
+	void ReadListXml();
+	void WriteListXml();
 
 private:
 	std::string strfilename;

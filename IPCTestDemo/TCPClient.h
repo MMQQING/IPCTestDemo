@@ -12,7 +12,7 @@ class TCPClient
 			hasError
 		};
 	public:
-		TCPClient();
+		explicit TCPClient(int);
 		~TCPClient();
 
 		void connect();
@@ -20,6 +20,7 @@ class TCPClient
 
 		//客户端发送控制命令
 		void send_cmd(char* pData, int len);
+		std::string get_remoteIP();
 
 	private:
 		//初始化tcp服务并开辟缓存空间
@@ -30,7 +31,9 @@ class TCPClient
 		void getData(char* p, std::size_t& len, boost::asio::ip::tcp::endpoint& ep);
 
 	private:		
+		int										_index;
 		std::shared_ptr<char>					m_ptrSendBuf;
+		std::string									m_RemoteIP;
 
 	public:
 		boost::shared_ptr<tcp::Itcpclient>		m_ptrTcpObject;

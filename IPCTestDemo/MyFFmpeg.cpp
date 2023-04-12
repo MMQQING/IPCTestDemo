@@ -6,10 +6,12 @@
 #pragma comment(lib, "./ffmpeg/lib/avformat.lib")
 #pragma comment(lib, "./ffmpeg/lib/avutil.lib")
 #pragma comment(lib, "./ffmpeg/lib/swscale.lib")
+#include "Cpclog.h"
 
 MyFFmpeg::MyFFmpeg(QObject *parent /*= nullptr*/)
 {
-	MyFFmpegInfo();
+	//MyFFmpegInfo();
+	timeout_ = 3000;
 }
 
 MyFFmpeg::~MyFFmpeg()
@@ -41,13 +43,13 @@ int MyFFmpeg::MyFFmpegInit()
 	avformat_network_init();
 
 	// 分配AVFormatContext，它是FFMPEG解封装（flv，mp4，rmvb，avi）功能的结构体，
-	// 具体可参考https://blog.csdn.net/leixiaohua1020/article/details/14214705
 	m_AVFormatContext = avformat_alloc_context();
-
+	m_AVFormatContext->interrupt_callback.callback = decode_interrupt_cb;
+	m_AVFormatContext->interrupt_callback.opaque = this;
 	// 设置参数
 	AVDictionary *options = NULL;
-	// 设置传输协议为TCP协议
-	av_dict_set(&options, "rtsp_transport", "udp", 0);
+// 	// 设置传输协议为TCP协议
+	av_dict_set(&options, "rtsp_transport", "tcp", 0);
 
 	// 设置TCP连接最大延时时间
 	av_dict_set(&options, "max_delay", "100", 0);
@@ -58,6 +60,7 @@ int MyFFmpeg::MyFFmpegInit()
 	// 设置avformat_open_input超时时间为3秒
 	av_dict_set(&options, "stimeout", "3000000", 0);
 
+	RestTiemout();
 	// 打开网络流或文件流
 	ret = avformat_open_input(&m_AVFormatContext, pRtspUrl, NULL, &options);
 	if (ret != 0)
@@ -115,10 +118,10 @@ int MyFFmpeg::MyFFmpegInit()
 	}
 
 	// 配置编码器上下文的参数
-	m_AVCodecContext->bit_rate = 50;         //码率
-	m_AVCodecContext->time_base.den = 30;   // 下面2行设置帧率，每秒/30帧
-	m_AVCodecContext->time_base.num = 1;
-	m_AVCodecContext->frame_number = 1;     //每包一个视频帧
+// 	m_AVCodecContext->bit_rate = 50;         //码率
+// 	m_AVCodecContext->time_base.den = 30;   // 下面2行设置帧率，每秒/30帧
+// 	m_AVCodecContext->time_base.num = 1;
+// 	m_AVCodecContext->frame_number = 1;     //每包一个视频帧
 
 	// Initialize the AVCodecContext to use the given AVCodec
 	if (avcodec_open2(m_AVCodecContext, m_AVCodec, NULL) < 0)
@@ -172,36 +175,28 @@ int MyFFmpeg::MyFFmpepReadFrame()
 {
 	int ret = -1;
 	int getPicture = 0;
-
 	// 获取下一帧数据
+	RestTiemout();
 	ret = av_read_frame(m_AVFormatContext, m_AVPacket);
 	if (ret < 0)
 	{
 		qDebug("av_read_frame fail!\n");
 		return -1;
 	}
-
 	if (m_AVPacket->stream_index != m_videoIndex)
 	{
 		av_packet_unref(m_AVPacket);
-		return 0;
+		return -1;
 	}
-
+	RestTiemout();
 
 	//  解码m_AVPacket，Decode the video frame of size avpkt->size from avpkt->data into picture
 	//ret = avcodec_decode_video2(m_AVCodecContext, m_AVFrame, &getPicture, m_AVPacket);
+	
 	if (avcodec_send_packet(m_AVCodecContext, m_AVPacket) < 0 || (getPicture = avcodec_receive_frame(m_AVCodecContext, m_AVFrame)) < 0) {
 		av_packet_unref(m_AVPacket);
 		return -1; 
 	}
-// 	if (ret < 0)
-// 	{
-// 		qDebug("avcodec_decode_video2 fail!\n");
-// 		av_free_packet(m_AVPacket);
-// 		return 0;
-// 	}
-
-	// got_picture_ptr Zero if no frame could be decompressed, otherwise, it is nonzero.
 	// 判断是否已有视频帧被解码了
 	if (getPicture == 0)
 	{
@@ -210,12 +205,19 @@ int MyFFmpeg::MyFFmpepReadFrame()
 			m_AVFrame->height, m_AVFrame->format, m_AVFrame->key_frame);
 #endif
 		// 对解码视频帧进行缩放、格式转换等操作
-		sws_scale(m_SwsContext, (uint8_t const * const *)m_AVFrame->data,
-			m_AVFrame->linesize, 0, m_AVCodecContext->height,
-			m_AVFrameRGB->data, m_AVFrameRGB->linesize);
+		sws_scale(	m_SwsContext, 
+					(uint8_t const * const *)m_AVFrame->data,
+					m_AVFrame->linesize, 
+					0,
+					m_AVCodecContext->height,
+					m_AVFrameRGB->data, 
+					m_AVFrameRGB->linesize);
 
 		// 转换到QImage
-		QImage tmmImage((uchar *)m_OutBuffer, m_AVCodecContext->width, m_AVCodecContext->height, QImage::Format_RGB32);
+		QImage tmmImage(	(uchar *)m_OutBuffer, 
+							m_AVCodecContext->width, 
+							m_AVCodecContext->height, 
+							QImage::Format_RGB32);
 		QImage image = tmmImage.copy();
 		//qDebug() << "numbytes" << image.size();
 		//image.save("./" + QString("%1.jpg").arg(frameIndex++));
@@ -225,11 +227,53 @@ int MyFFmpeg::MyFFmpepReadFrame()
 
 	// 释放资源
 	av_packet_unref(m_AVPacket);
+	
+	return 0;
+}
 
+int MyFFmpeg::decode_interrupt_cb(void *ctx)
+{
+	MyFFmpeg *rtsp_puser = (MyFFmpeg *)ctx;
+	if (rtsp_puser->IsTimeout()) {
+		qDebug("timeout:%dms", rtsp_puser->GetTimeout());
+		CPCLOG_ERROR << "timeout:" << rtsp_puser->GetTimeout() << "ms";
+		return 1;
+	}
+	//qDebug("block time:%lld", rtsp_puser->GetBlockTime());
 	return 0;
 }
 
 void MyFFmpeg::MyFFmpegSetUrl(QString rtspUrl)
 {
 	m_rtspUrl = rtspUrl;
+}
+
+bool MyFFmpeg::IsTimeout()
+{
+	DWORD SS = GetTickCount();
+	DWORD MM = SS - pre_time_;
+	if (MM > timeout_) {
+		return true;    // 超时
+	}
+	return false;
+}
+
+void MyFFmpeg::SetTimeout(int time)
+{
+	timeout_ = time;
+}
+
+void MyFFmpeg::RestTiemout()
+{
+	pre_time_ = GetTickCount();        // 重置为当前时间
+}
+
+int MyFFmpeg::GetTimeout()
+{
+	return timeout_;
+}
+
+int64_t MyFFmpeg::GetBlockTime()
+{
+	return GetTickCount() - pre_time_;
 }

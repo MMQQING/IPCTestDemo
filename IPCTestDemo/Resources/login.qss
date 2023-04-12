@@ -1,0 +1,144 @@
+QWidget{
+    color: rgba(255,255,255,0.9);
+    background:#212121;
+}
+
+QPushButton{
+	font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid #999999;
+    background: rgba(102,102,102,0.25);
+    color: rgba(255,255,255,0.9);
+}
+QPushButton:enabled:hover{ 
+    color: rgba(0,0,0,0.9);
+    background: #FFFFFF;
+}
+#objadvcfg,#objquit,#objlogin{
+	width: 424px;
+	height: 32px;
+}
+.QGroupBox{
+	border: 1px solid #80D0D0D0;
+	border-radius: 1px;
+	margin-top: 5px;
+}
+
+QGroupBox:title{
+    color:#D0D0D0;
+    subcontrol-origin: margin;
+    /*top: 1px;*/
+}
+QLineEdit {
+	border-radius: 2px;
+	border: 1px solid #999999;
+	padding: 2px;	
+	font-size: 14px;
+	background: transparent;
+	selection-background-color: #4d4d4d;
+	color: #FFFFFF;
+}
+QLabel{
+	font-size: 14px;
+	border-radius:0px;
+	color: rgba(255,255,255,0.9);
+	border-color: #18707070;
+	background-color: transparent;
+	border-style:solid;
+	border-width:0px;
+}
+#objLogo{
+	background-repeat:no-repeat;
+	background-position:center;
+	background-origin:border;
+	background-image: url(:/new/login/Resources/login/logo_slices/logo.png);
+}
+#Login_logo_label{
+	max-width: 12px;
+	max-height: 12px;
+	image:url(:/new/login/Resources/login/warning.png);
+}
+
+#objServerip{
+	background: rgba(102,102,102,0.25);
+	border-radius: 2px;
+	border:0px solid transparent;
+}
+#groupBox {
+    border-top: 2px solid #999999;
+	border-bottom: 0px solid red;
+	border-left: 0px solid red;
+	border-right: 0px solid red;
+}
+#objtest{
+	width: 110px;
+	height: 30px;
+}
+
+QComboBox{
+	background: rgba(102,102,102,0.25);
+	border-radius: 2px;
+	border: 1px solid transparent;
+}
+
+QComboBox::drop-down
+{
+	subcontrol-origin: padding; 
+	subcontrol-position: right;
+    width: 27px;   /* 下拉框的宽度 */
+	border:0px solid darkgray;
+	image: url(:/new/login/Resources/login/arrow.png);
+}
+
+QComboBox QAbstractItemView{
+	outline: 0px solid gray;  /*取消选中虚线*/
+	min-height:	20px;
+	background: #313131;
+	border:1px solid #666666;
+	padding: 6px 6px 6px 6px;   /* 字体填衬 */
+	font-size: 14px;
+}
+
+ /*选中每一项高度*/
+QComboBox QAbstractItemView::item
+{
+	height: 30px;
+}
+
+/*选中每一项的字体颜色和背景颜色*/
+QComboBox QAbstractItemView::item:selected 
+{
+    color: #FFFFFF;;
+	background-color: rgba(102,102,102,0.25); 
+}
+
+#objlocalip
+{
+	width: 194px;
+	height: 30px;
+	border-radius: 2px;
+	font-size: 14px;
+}
+
+QCheckBox {
+	spacing: 2px; 
+	color: #D0D0D0;
+}
+
+QCheckBox::indicator {
+	width: 15px;
+	height: 15px;
+	color: #D0D0D0;
+}
+
+QCheckBox::indicator:unchecked {
+	image: url(:/new/login/Resources/icon/default.png);
+}
+
+QCheckBox::indicator:hover {
+	image: url(:/new/login/Resources/icon/hover.png);
+}
+
+QCheckBox::indicator:checked {
+	image: url(:/new/login/Resources/icon/press.png);
+}
