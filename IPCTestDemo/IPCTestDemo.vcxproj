@@ -169,6 +169,7 @@
     <QtMoc Include="MainWidgets.h" />
     <QtMoc Include="MLabel.h" />
     <QtMoc Include="MovingWidget.h" />
+    <ClInclude Include="FSVersion.h" />
     <ClInclude Include="MyHelper.h" />
     <QtMoc Include="RTSP_Player.h" />
     <QtMoc Include="WifiTestWidget.h" />

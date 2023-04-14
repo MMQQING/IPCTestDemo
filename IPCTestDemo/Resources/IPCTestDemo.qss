@@ -18,6 +18,13 @@ QWidget
 	color: #22D3EE;
 	background:transparent;
 }
+#groupBox_3>#show_info_label
+{
+	height: 22px;
+	font-size: 14px;
+	color: #22D3EE;
+	background:transparent;
+}
 QLabel
 {
 	height: 21px;

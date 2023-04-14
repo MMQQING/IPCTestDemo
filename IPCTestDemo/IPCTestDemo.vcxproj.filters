@@ -51,6 +51,9 @@
     <Filter Include="资源文件">
       <UniqueIdentifier>{41706218-a505-4a51-abf9-2bd47683bfa3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\版本文件">
+      <UniqueIdentifier>{106e30fe-ff19-4acd-8ba6-d90c2bf4521e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="IPCTestDemo.qrc">
@@ -176,7 +179,7 @@
       <Filter>Source Files\界面模块</Filter>
     </ClCompile>
     <ClCompile Include="BigWindowClass.cpp">
-      <Filter>Form Files</Filter>
+      <Filter>Source Files\界面模块</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,6 +221,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FSVersion.h">
+      <Filter>Header Files\版本文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -342,7 +348,7 @@
       <Filter>Header Files\界面模块</Filter>
     </QtMoc>
     <QtMoc Include="BigWindowClass.h">
-      <Filter>Form Files</Filter>
+      <Filter>Header Files\界面模块</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

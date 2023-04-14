@@ -18,6 +18,13 @@ QWidget#main_widget,#bottom_widget
 	color: #22D3EE;
 	background:transparent;
 }
+#groupBox_3>#show_info_label
+{
+	height: 22px;
+	font-size: 14px;
+	color: #22D3EE;
+	background:transparent;
+}
 QLabel
 {
 	height: 20px;
@@ -35,6 +42,12 @@ QLabel#info_label
 	font-size: 14px;
 	height: 20px;
 	color: #20FCFF;
+}
+QLabel#time_label,#version_label
+{
+	font-size: 14px;
+	height: 20px;
+	color: #999999;
 }
 QPushButton
 {

@@ -1,6 +1,7 @@
 #include "MainWidgets.h"
 #include <QPainter>
-
+#include <QDateTime>
+#include "FSVersion.h"
 MainWidgets::MainWidgets(QWidget *parent)
 	: QWidget(parent),
 	ui(new Ui::MainWidgets)
@@ -22,6 +23,9 @@ void MainWidgets::initPage()
 	setWindowState(Qt::WindowMaximized);
 	bigWindow = new BigWindowClass(this);
 	_index = -1;
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdata()));
+	timer->start(1000);
 	initStyle();
 }
 
@@ -32,6 +36,8 @@ void MainWidgets::bindSinalSlot()
 
 void MainWidgets::initStyle()
 {
+	ui->time_label->setAlignment(Qt::AlignVCenter);
+	showVersion(FS_FILE_VERSION);
 	QFile styleFile(":/IPCTestDemo/Resources/MainWidget.qss");
 	if (!styleFile.open(QIODevice::ReadOnly))
 	{
@@ -39,6 +45,15 @@ void MainWidgets::initStyle()
 	}
 	this->setStyleSheet(styleFile.readAll());
 	styleFile.close();
+}
+
+void MainWidgets::showVersion(int yy, int mm, int dd, int ver)
+{
+	ui->version_label->setText(QString::fromLocal8Bit("Èí¼þ°æ±¾£º")+
+		QString::number(yy)+"."+
+		QString::number(mm) + "."+
+		QString::number(dd) + "." + 
+		QString::number(ver) );
 }
 
 void MainWidgets::SlotGetOneFrame(int index, QImage img)
@@ -54,11 +69,20 @@ void MainWidgets::slot_changge_index(int num)
 	bigWindow->show();
 }
 
+void MainWidgets::timerUpdata(void)
+{
+	//QFont font("Microsoft YaHei", 20, 50);
+	//ui->time_label->setFont(font);
+	QDateTime time = QDateTime::currentDateTime();
+	QString str = time.toString("yyyy-MM-dd hh:mm:ss dddd");
+	this->ui->time_label->setText(str);
+}
+
 void MainWidgets::slot_addItem(QVector<QString> vec)
 {
 	int m = ui->main_widget->width();
 	QHBoxLayout *layout = new QHBoxLayout;
-	layout->setContentsMargins(20, 14, 20, 14);
+	layout->setContentsMargins(20, 14, 20, 0);
 	for (int i = 0; i < 4; i++) {
 		IPCTestDemo* ipcPage = new IPCTestDemo(i);
 		bool bl = connect(this, SIGNAL(vector_test(QVector<QString>)), ipcPage, SLOT(initTestItems(QVector<QString>)));

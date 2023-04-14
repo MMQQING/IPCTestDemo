@@ -99,4 +99,5 @@ private:
 	ButtonEdit*				edit_PCBASN;
 	//ButtonEdit*				edit_AppVersion;
 	QPushButton*			startTestBtn;
+	MLabel*					show_info_label;
 };

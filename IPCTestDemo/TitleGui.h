@@ -5,8 +5,8 @@
 #include "QRect"
 #include "QMouseEvent"
 
-#define WIN_WIDTH  1440
-#define WIN_HEIGHT  900
+#define WIN_WIDTH  1920
+#define WIN_HEIGHT  1032
 
 #define MAX_ICON 0xf096
 #define MID_ICON 0xf079

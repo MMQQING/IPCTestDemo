@@ -193,6 +193,11 @@ void IPCTestDemo::initTestItems(QVector<QString> vec)
 	hlayout->addWidget(startTestBtn);
 	layout->addLayout(hlayout);
 	layout->addLayout(pLayout);
+	QVBoxLayout* layout_2 = new QVBoxLayout;
+	show_info_label = new MLabel(this);
+	show_info_label->setObjectName("show_info_label");
+	layout_2->addWidget(show_info_label);
+	layout->addLayout(layout_2);
 	ui->groupBox_3->setLayout(layout);
 	bool bl = connect(startTestBtn, SIGNAL(clicked()), this, SLOT(slots_testButton()));
 	//initStyle();
@@ -314,10 +319,10 @@ void IPCTestDemo::comparInfo(QMap<QString, QString> map)
 	}
 	if(bl){
 		slots_upButton();
-		ui->info_label->setText(QString::fromLocal8Bit("比对成功"));
+		show_info_label->setText(QString::fromLocal8Bit("比对成功"));
 	}
 	else{
-		ui->info_label->setText(QString::fromLocal8Bit("比对失败"));
+		show_info_label->setText(QString::fromLocal8Bit("比对失败"));
 	}
 }
 
@@ -435,7 +440,7 @@ void IPCTestDemo::upDataToPage_20(bool bl, QString str, QVariant var)
 		QMap<QString, QString> _maps = var.value<QMap<QString, QString>>();
 		ui->lineEdit_MOCode->setText(_maps.value("MOCode"));
 	}
-	ui->info_label->setText(str);
+	show_info_label->setText(str);
 }
 
 void IPCTestDemo::upDataToPage_30(bool bl, QString str)
@@ -450,7 +455,7 @@ void IPCTestDemo::upDataToPage_30(bool bl, QString str)
 		ui->write_Button->setEnabled(false);
 		ui->compar_Button->setEnabled(false);
 	}
-	ui->info_label->setText(str);
+	show_info_label->setText(str);
 }
 
 void IPCTestDemo::upDataToPage_40(bool bl, QString str, QVariant var)
@@ -472,7 +477,7 @@ void IPCTestDemo::upDataToPage_40(bool bl, QString str, QVariant var)
 
 
 	}
-	ui->info_label->setText(str);
+	show_info_label->setText(str);
 }
 
 void IPCTestDemo::upDataFromIPC(QVariant var, QString str)
@@ -491,9 +496,9 @@ void IPCTestDemo::upDataFromIPC(QVariant var, QString str)
 		else
 		{
 			ui->lineEdit_AppVersion->setStyleSheet("color:#FF0000;");
-			ui->info_label->setStyleSheet("color:#FF0000;");
+			show_info_label->setStyleSheet("color:#FF0000;");
 			startTestBtn->setEnabled(false);
-			ui->info_label->setText(QString::fromLocal8Bit("固件版本不正确"));
+			show_info_label->setText(QString::fromLocal8Bit("固件版本不正确"));
 		}
 		ui->lineEdit_AppVersion->setText(ver_str);
 #ifdef PCBA
@@ -631,6 +636,8 @@ void IPCTestDemo::on_pushButton_2_clicked()
 		ui->pushButton_2->setEnabled(false);
 		ui->write_Button->setEnabled(false);
 		ui->compar_Button->setEnabled(false);
+		show_info_label->setStyleSheet("color:#22D3EE;");
+		show_info_label->setText("");
 	}
 	else if (ui->pushButton_2->text().compare(QString::fromLocal8Bit("断开连接")) == 0) {
 		_ParCmd.tcpDisConnect();
@@ -647,6 +654,8 @@ void IPCTestDemo::slots_testButton()
 {
 	_testlist.clear();
 	_mapResult.clear();
+	show_info_label->setStyleSheet("color:#22D3EE;");
+	show_info_label->setText("");
 	QMap<QString, QLabel*>::iterator iter = _map.begin();
 	while (iter != _map.end())
 	{
@@ -771,12 +780,12 @@ void IPCTestDemo::slots_upReturn(QString testname, int revalue)
 {
 	if (testname.contains("keywrite")) {
 		if (revalue == 1) {
-			ui->info_label->setText(QString::fromLocal8Bit("写入信息成功"));
+			show_info_label->setText(QString::fromLocal8Bit("写入信息成功"));
 			clearMesInfo();
 			slots_upButton();
 		}
 		else {
-			ui->info_label->setText(QString::fromLocal8Bit("写入信息失败"));
+			show_info_label->setText(QString::fromLocal8Bit("写入信息失败"));
 		}
 	}
 	_mapResult.insert(testname, QString::number(revalue));
