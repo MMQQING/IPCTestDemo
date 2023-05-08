@@ -4,10 +4,10 @@
 		<para account="wmssync" psw="wmssync" autolog="0" access="0" rescode="4FA01-F7-01"/>
 	</login>
 	<Firmware>
-		<firmware firmwareVersion="V1.1.05.Audio-00-221107-230313"/>
+		<firmware firmwareVersion="V1.0.04-00-221107-230413"/>
 	</Firmware>
 	<Comm>
-		<tcppara lip="192.168.168.117" rip="192.168.168.88" lport="4000" rport="10801"/>
+		<tcppara lip="192.168.168.106" rip="192.168.168.88" lport="4000" rport="10801"/>
 		<url ipcurl=""/>
 	</Comm>
 	<Wifi>

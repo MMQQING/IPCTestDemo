@@ -725,6 +725,11 @@ void IPCTestDemo::slots_ManTest(QString testname, int revalue)
 	default:
 		break;
 	}
+	if(testname=="ptzatlogo"&&revalue == Result_False){
+		show_info_label->setStyleSheet("color:#FF0000;");
+		show_info_label->setText(QString::fromLocal8Bit("马达恢复初始位置失败."));
+		testname = "ptztest";
+	}
 	_map.value(testname)->setStyleSheet(backColor);
 	if (revalue == 0x01) {
 		_mapResult.insert(testname, QString::number(revalue));

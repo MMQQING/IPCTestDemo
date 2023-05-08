@@ -75,7 +75,8 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 		case CMD_VOIPKEYTEST:			str = TS_CallButton();				break;
 		case CMD_TFTEST:				str = TS_TFCard();					break;
 		case CMD_LDRTEST:				str = TS_Photosensitive();			break;
-		case CMD_PTZTEST:				str = TS_PtzMotor();				break;
+		//case CMD_PTZTEST:				str = TS_PtzMotor();				break;
+		case CMD_PTZTEST:				str = RS_PtzMotor();				break;
 		case CMD_WIFISCANRESULT:		str = TS_WiFiScanResult();			break;
 		case CMD_RESET:					str = TS_ReSet();					break;
 		default:
@@ -97,7 +98,7 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 		case CMD_VOIPKEYTEST:	str = RS_CallButton();				break;
 		case CMD_TFTEST:		str = RS_TFCard();					break;
 		case CMD_LDRTEST:		str = RS_Photosensitive();			break;
-		case CMD_PTZTEST:		str = RS_PtzMotor(value);			break;
+		//case CMD_PTZTEST:		str = RS_PtzMotor(value);			break;
 		default:
 			break;
 		}
@@ -999,13 +1000,27 @@ std::string ParsingCmd::RS_Photosensitive()
 }
 
 //PTZÂí´ï²âÊÔ
-std::string ParsingCmd::RS_PtzMotor(uint32_t value)
+// std::string ParsingCmd::RS_PtzMotor(uint32_t value)
+// {
+// 	if(value == Result_False){
+// 		emit manResult(QString::fromStdString("ptztest"), Result_False);
+// 		emit myResult("ptztest", Result_False);
+// 		return "";
+// 	}
+// 	uint32_t command = A_TEST;
+// 	std::string testname = "ptzatlogo";
+// 	IM::Apacket apacket;
+// 	IM::Amessage *msg = new IM::Amessage();
+// 	msg->set_command(command);
+// 	msg->set_testname(testname);
+// 	apacket.set_allocated_msg(msg);
+// 
+// 	std::string str;
+// 	apacket.SerializeToString(&str);
+// 	return str;
+// }
+std::string ParsingCmd::RS_PtzMotor()
 {
-	if(value == Result_False){
-		emit manResult(QString::fromStdString("ptztest"), Result_False);
-		emit myResult("ptztest", Result_False);
-		return "";
-	}
 	uint32_t command = A_TEST;
 	std::string testname = "ptzatlogo";
 	IM::Apacket apacket;
@@ -1185,7 +1200,7 @@ void ParsingCmd::IPC_RS_PTZatlogo(IM::Apacket apacketinfo)
 		if(bl){
 			emit showMovingWidget();
 		}else{
-			emit manResult(QString::fromStdString("ptztest"), Result_False);
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), Result_False);
 			emit myResult("ptztest", Result_False);
 		}		
 	}

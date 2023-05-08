@@ -112,7 +112,8 @@ private:
 	//测试光敏
 	std::string RS_Photosensitive();
 	//PTZ马达测试
-	std::string RS_PtzMotor(uint32_t value);
+	//std::string RS_PtzMotor(uint32_t value);
+	std::string RS_PtzMotor();
 	//影像确认项（人工查看图像）
 	void RS_Video(uint32_t value);
 private:

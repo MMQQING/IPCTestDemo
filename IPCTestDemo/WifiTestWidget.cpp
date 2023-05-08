@@ -120,10 +120,13 @@ void WifiTestWidget::slot_upWiFiInfo(QVariant var)
 			ui.frequency_lineEdit->setText(iter.value());
 		}
 		else if (iter.key().compare("dBm") == 0) {
+			qDebug() << iter.value().toInt()<<"db";
 			if (iter.value().toInt() < gVar->m_stCommonInfo.SignalStrength) {
 				ui.dBm_lineEdit->setStyleSheet("background-color:#A23400;");
+				false_button();
 			}else{
 				ui.dBm_lineEdit->setStyleSheet("background-color:#64A600;");
+				ok_button();
 			}
 			ui.dBm_lineEdit->setText(iter.value());
 		}
@@ -208,7 +211,8 @@ void WifiTestWidget::false_button()
 // 	if (process != nullptr) {
 // 		process->close();
 // 		process->waitForFinished();
-// 	}	
+// 	}
+	ui.dBm_lineEdit->setStyleSheet("background-color:#ffffff;");
 	emit wifi_signal("wifiscanresults", Result_False);
 }
 
@@ -222,6 +226,7 @@ void WifiTestWidget::ok_button()
 // 		process->close();
 // 		process->waitForFinished();
 // 	}
+	ui.dBm_lineEdit->setStyleSheet("background-color:#ffffff;");
 	emit wifi_signal("wifiscanresults", Result_Pass);
 }
 

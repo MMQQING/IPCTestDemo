@@ -408,7 +408,6 @@ void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 			{
 				str = pt.get<std::string>("document.ReturnMessage");
 				emit mes30Res(true, QString::fromLocal8Bit(str.c_str()).simplified());
-				//emit mes20Res(true, QString::fromLocal8Bit("上传成功"));
 				return;
 			}
 		}

@@ -1,3 +1,9 @@
 #pragma once
-#define  FS_FILE_VERSION 23,4,13,1
-#define  FS_VERSION "23,4,13,1"
+#define  FS_FILE_VERSION 23,5,8,1
+#define  FS_VERSION "23,5,8,1"
+//版本更新说明
+/************************************
+23.5.8.1
+	1.wifi信号强度测试去除人工判定。
+
+*************************************/

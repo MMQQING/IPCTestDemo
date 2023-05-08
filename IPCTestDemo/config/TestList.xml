@@ -3,20 +3,20 @@
 	<modulesA>
 		<module>影像清晰度及脏点确认</module>
 		<module>测试TF卡</module>
-		<module>测试扬声器</module>
-		<module>测试红外夜视</module>
-		<module>开关白光灯</module>
-		<module>开关红外灯</module>
+		<module>WiFi测试</module>
 		<module>开关网络LED灯</module>
-		<module>测试麦克风</module>
-		<module>测试Rest按键</module>
 	</modulesA>
 	<modulesB>
 		<module>测试全彩夜视</module>
 		<module>测试光敏</module>
 		<module>测试通话按键</module>
-		<module>PTZ马达测试</module>
-		<module>WiFi测试</module>
 		<module>开关IRCUT</module>
+		<module>测试Rest按键</module>
+		<module>开关白光灯</module>
+		<module>测试麦克风</module>
+		<module>开关红外灯</module>
+		<module>测试红外夜视</module>
+		<module>PTZ马达测试</module>
+		<module>测试扬声器</module>
 	</modulesB>
 </root>
