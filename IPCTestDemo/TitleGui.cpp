@@ -29,6 +29,13 @@ void TitleGui::initStyle()
 	}
 	this->setStyleSheet(styleFile.readAll());
 	styleFile.close();
+
+#ifdef MES
+		ui.title_Text->setText(QString::fromLocal8Bit("微网产测工具"));
+#else
+		ui.title_Text->setText(QString::fromLocal8Bit("微网产测工具（离线版）"));
+#endif // MES
+
 }
 
 void TitleGui::InitMenu()

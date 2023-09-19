@@ -37,6 +37,7 @@ public:
 	static int decode_interrupt_cb(void *ctx);
 signals:
 	void MyFFmpegSigGetOneFrame(QImage img);
+	void GetFramIsTimeOut();
 private:
 	int              m_videoIndex;
 	QString          m_rtspUrl;

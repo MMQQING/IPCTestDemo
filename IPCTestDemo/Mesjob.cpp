@@ -1,5 +1,6 @@
 #include "Mesjob.h"
 #include "GlobleVar.h"
+#include <QCoreApplication>
 
 Mesjob::Mesjob()
 {
@@ -89,8 +90,11 @@ bool Mesjob::common_login()
 	std::stringstream str_stream;
 	write_xml(str_stream, pt);
 	std::string str = str_stream.str();
-	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
-	str = str.replace(str.begin(), str.begin() + sizeof(str_head)-1, "");
+	std::string str_head("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	//std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
+	str.erase(0, str_head.size() - 1);
+
+	//str = str.replace(str.begin(), str.find_first_of(">"), "");
 	//json
 	boost::property_tree::ptree pItem;
 	pItem.put("InterfaceNo",std::to_string(10));
@@ -99,14 +103,15 @@ bool Mesjob::common_login()
 
 	std::stringstream stream;
 	write_json(stream, pItem);
-//	std::string str1 = stream.str();
-//	遍历结构体代码test
-	st_login_result* P_Member = &gVar->m_stLoginInfo;		//指向结构体的指针
-	std::string* P = (std::string*)P_Member;				//结构体指针强制转换为string类型
 
 	//发送给web
 	std::string body = stream.str();
-	if (auto res = cli->Post("/common/call", body, "application/json")) {
+	std::string path;
+	if(gVar->m_stCommonInfo.blMes20)
+		path = "/api/common/call";
+	else
+		path = "/common/call";
+	if (auto res = cli->Post(path.c_str(), body, "application/json")) {	
 		if (res->status == 200) {
 			std::cout << res->body << std::endl;
 			std::string m_str = UTF8_To_String(res->body);
@@ -120,10 +125,11 @@ bool Mesjob::common_login()
 			}
 			else
 			{
-				auto child = pt.get_child("document");
-				for (auto i = child.begin(); i != child.end(); ++i) {
-					(*P++) = i->second.get_value<std::string>();
-				}
+				ptr->m_stLoginInfo.LineId = pt.get<std::string>("document.LineId", "123");
+				ptr->m_stLoginInfo.ResId = pt.get<std::string>("document.ResId", "123");
+				ptr->m_stLoginInfo.ShiftTypeId = pt.get<std::string>("document.ShiftTypeId", "123");
+				ptr->m_stLoginInfo.UserId = pt.get<std::string>("document.UserId", "123");
+				ptr->m_stLoginInfo.OPId = pt.get<std::string>("document.OPId", "123");
 			//TEST
 				emit mesConn(true,QString::fromLocal8Bit("连接成功"));
 			return true;
@@ -137,74 +143,6 @@ bool Mesjob::common_login()
 	}
 	return false;
 }
-
-//通过SN查询
-// void Mesjob::common_get20info(QString SNstr)
-// {
-// 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
-// 	using namespace boost::property_tree;
-// 	ptree pt;
-// 	pt.put<std::string>("document.IsTransferMO", std::to_string(0));
-// 	pt.put<std::string>("document.MOId", "");
-// 	pt.put<std::string>("document.LotSNType", "SN");
-// 	pt.put<std::string>("document.LotSN", SNstr.toStdString());
-// 	pt.put<std::string>("document.LineId", ptr->m_stLoginInfo.LineId);
-// 	pt.put<std::string>("document.ResId", ptr->m_stLoginInfo.ResId);
-// 	pt.put<std::string>("document.UserId", ptr->m_stLoginInfo.UserId);
-// 	pt.put<std::string>("document.OPId", ptr->m_stLoginInfo.OPId);
-// 	xml_writer_settings <std::string > settings('\t', 1);
-// 	std::stringstream str_stream;
-// 	write_xml(str_stream, pt);
-// 	std::string str = str_stream.str();
-// 	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
-// 	str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
-// 	//json
-// 	boost::property_tree::ptree pItem;
-// 	pItem.put("InterfaceNo", std::to_string(20));
-// 	pItem.put("Params", str);
-// 	pItem.put("AttachParams", "");
-// 
-// 	std::stringstream stream;
-// 	write_json(stream, pItem);
-// 	std::string str1 = stream.str();
-// 	//遍历结构体代码test
-// 	st_20_result* P_Member = &gVar->m_st20Info;		//指向结构体的指针
-// 	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
-// 
-// 	//发送给web
-// 	std::string body = stream.str();
-// 	if (auto res = cli->Post("/common/call", body, "application/json")) {
-// 		if (res->status == 200) {
-// 			std::cout << res->body << std::endl;
-// 			std::string m_str = UTF8_To_String(res->body);
-// 			boost::property_tree::ptree pt = parse_res(m_str);
-// 			std::string str = pt.get<std::string>("document.ReturnValue");
-// 			if (!atoi(str.c_str())) {
-// 				str = pt.get<std::string>("document.ReturnMessage");
-// 				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()));
-// 				CPCLOG_ERROR << str;
-// 				return;
-// 			}
-// 			else
-// 			{
-// 				auto child = pt.get_child("document");
-// 				for (auto i = child.begin(); i != child.end(); ++i) {
-// 					(*P++) = i->second.get_value<std::string>();
-// 				}
-// 				//TEST
-// 				emit mes20Res(true, QString::fromLocal8Bit("校验成功"));
-// 				common_get40info();
-// 				return;
-// 			}
-// 		}
-// 	}
-// 	else {
-// 		emit mes20Res(false, QString::fromLocal8Bit("请修改MES地址..."));
-// 		CPCLOG_ERROR << QString::fromLocal8Bit("请修改MES地址...").toStdString();
-// 		return;
-// 	}
-// 	return;
-// }
 
 //通过CMEI查询
 void Mesjob::common_get20info(QString CMEIstr)
@@ -225,8 +163,8 @@ void Mesjob::common_get20info(QString CMEIstr)
 	std::stringstream str_stream;
 	write_xml(str_stream, pt);
 	std::string str = str_stream.str();
-	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
-	str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
+	std::string str_head("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	str.erase(0, str_head.size() - 1);
 	//json
 	boost::property_tree::ptree pItem;
 	pItem.put("InterfaceNo", std::to_string(20));
@@ -237,12 +175,17 @@ void Mesjob::common_get20info(QString CMEIstr)
 	write_json(stream, pItem);
 	std::string str1 = stream.str();
 	//遍历结构体代码test
-	st_20_result* P_Member = &m_st20Info;			//指向结构体的指针
-	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
+//	st_20_result* P_Member = &m_st20Info;			//指向结构体的指针
+//	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
 
 	//发送给web
 	std::string body = stream.str();
-	if (auto res = cli->Post("/common/call", body, "application/json")) {
+	std::string path;
+	if (gVar->m_stCommonInfo.blMes20)
+		path = "/api/common/call";
+	else
+		path = "/common/call";
+	if (auto res = cli->Post(path.c_str(), body, "application/json")){
 		if (res->status == 200) {
 			std::cout << res->body << std::endl;
 			std::string m_str = UTF8_To_String(res->body);
@@ -251,17 +194,20 @@ void Mesjob::common_get20info(QString CMEIstr)
 			if (!atoi(str.c_str())) {
 				str = pt.get<std::string>("document.ReturnMessage");
 				emit mes20Res(false, QString::fromLocal8Bit(str.c_str()).simplified(), DataVar);
-				CPCLOG_ERROR << str;
+				CPCLOG_ERROR << QString::fromLocal8Bit(str.c_str()).toStdString();
 				return;
 			}
 			else
 			{
-				auto child = pt.get_child("document");
-				for (auto i = child.begin(); i != child.end(); ++i) {
-					(*P++) = i->second.get_value<std::string>();
-				}
+// 				auto child = pt.get_child("document");
+// 				for (auto i = child.begin(); i != child.end(); ++i) {
+// 					(*P++) = i->second.get_value<std::string>();
+// 				}
 				//TEST
 				QMap<QString, QString> _map;
+				m_st20Info.MOCode	= pt.get<std::string>("document.MOCode", "123");
+				m_st20Info.LotId	= pt.get<std::string>("document.LotId", "123");
+
 				_map.insert("MOCode", QString::fromStdString(m_st20Info.MOCode));
 				DataVar.setValue(_map);
 				emit mes20Res(true, QString::fromLocal8Bit("校验成功"), DataVar);
@@ -288,8 +234,10 @@ void Mesjob::common_get40info()
 	std::stringstream str_stream;
 	write_xml(str_stream, pt);
 	std::string str = str_stream.str();
-	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
-	str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
+	std::string str_head("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	str.erase(0, str_head.size() - 1);
+	//std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
+	//str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
 	//json
 	boost::property_tree::ptree pItem;
 	pItem.put("InterfaceNo", std::to_string(40));
@@ -300,12 +248,17 @@ void Mesjob::common_get40info()
 	write_json(stream, pItem);
 	//	std::string str1 = stream.str();
 	//遍历结构体代码test
-	st_40_result* P_Member = &m_st40Info;		//指向结构体的指针
-	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
+//	st_40_result* P_Member = &m_st40Info;		//指向结构体的指针
+//	std::string* P = (std::string*)P_Member;		//结构体指针强制转换为string类型
 
 	//发送给web
 	std::string body = stream.str();
-	if (auto res = cli->Post("/common/call", body, "application/json")) {
+	std::string path;
+	if (gVar->m_stCommonInfo.blMes20)
+		path = "/api/common/call";
+	else
+		path = "/common/call";
+	if (auto res = cli->Post(path.c_str(), body, "application/json")) {
 		if (res->status == 200) {
 			std::cout << res->body << std::endl;
 			std::string m_str = UTF8_To_String(res->body);
@@ -319,22 +272,22 @@ void Mesjob::common_get40info()
 			}
 			else
 			{
-				auto child = pt.get_child("document");
-				for (auto i = child.begin(); i != child.end(); ++i) {
-					(*P++) = i->second.get_value<std::string>();
-				}
-				/*
-				m_st40Info.Mac = pt.get<std::string>("document.Mac");
-				m_st40Info.SN = pt.get<std::string>("document.SN");
-				//m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.DeviceSerialNumber");
-				m_st40Info.DeviceSerialNumber = pt.get<std::string>("document.SN");
-				m_st40Info.CMEI = pt.get<std::string>("document.CMEI");
-				//m_st40Info.DevKey = pt.get<std::string>("document.DevKey");
-				//m_st40Info.DevKey = pt.get<std::string>("document.CiphertextPassword");
-				m_st40Info.UserPass = pt.get<std::string>("document.CiphertextPassword");
-				m_st40Info.DevKey = pt.get<std::string>("document.UserPass");
-				*/
+// 				auto child = pt.get_child("document");
+// 				for (auto i = child.begin(); i != child.end(); ++i) {
+// 					(*P++) = i->second.get_value<std::string>();
+// 				}
+
 				QMap<QString, QString> _map;
+
+				m_st40Info.Mac					= pt.get<std::string>("document.Mac", "123");
+				m_st40Info.SN					= pt.get<std::string>("document.SN", "123");
+				m_st40Info.DeviceSerialNumber	= pt.get<std::string>("document.DeviceSerialNumber", "123");
+				m_st40Info.CiphertextPassword	= pt.get<std::string>("document.CiphertextPassword", "123");
+				m_st40Info.CMEI					= pt.get<std::string>("document.CMEI", "123");
+				m_st40Info.UserPass				= pt.get<std::string>("document.UserPass", "123");
+				m_st40Info.DevKey				= pt.get<std::string>("document.DevKey", "123");
+				m_st40Info.PCBASN				= pt.get<std::string>("document.PCBASN", "123");
+
 				_map.insert("Mac", QString::fromStdString(m_st40Info.Mac));
 				_map.insert("SN", QString::fromStdString(m_st40Info.SN));
 				_map.insert("DeviceSerialNumber", QString::fromStdString(m_st40Info.DeviceSerialNumber));
@@ -361,6 +314,7 @@ void Mesjob::common_get40info()
 
 void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 {
+	QString logFilepath = QCoreApplication::applicationDirPath() + "/logs";
 	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
 	using namespace boost::property_tree;
 	ptree pt;
@@ -374,12 +328,15 @@ void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 	pt.put<std::string>("document.OPId", ptr->m_stLoginInfo.OPId);
 	pt.put<std::string>("document.IsPass", std::to_string(bl));
 	pt.put<std::string>("document.TestLog", qstr.toStdString());
+	pt.put<std::string>("document.FilePath", logFilepath.toStdString());
 	xml_writer_settings <std::string > settings('\t', 1);
 	std::stringstream str_stream;
 	write_xml(str_stream, pt);
 	std::string str = str_stream.str();
-	std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
-	str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
+	std::string str_head("<?xml version=\"1.0\" encoding=\"utf - 8\"?>");
+	str.erase(0, str_head.size() - 1);
+	//std::string str_head = R"(<?xml version="1.0" encoding="utf-8"?>)";
+	//str = str.replace(str.begin(), str.begin() + sizeof(str_head) - 1, "");
 	//json
 	boost::property_tree::ptree pItem;
 	pItem.put("InterfaceNo", std::to_string(30));
@@ -392,7 +349,12 @@ void Mesjob::common_send30info(int bl, QString qstr, QString errstr)
 
 	//发送给web
 	std::string body = stream.str();
-	if (auto res = cli->Post("/common/call", body, "application/json")) {
+	std::string path;
+	if (gVar->m_stCommonInfo.blMes20)
+		path = "/api/common/call";
+	else
+		path = "/common/call";
+	if (auto res = cli->Post(path.c_str(), body, "application/json")) {
 		if (res->status == 200) {
 			std::cout << res->body << std::endl;
 			std::string m_str = UTF8_To_String(res->body);

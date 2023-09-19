@@ -6,11 +6,17 @@ RTSP_Player::RTSP_Player(MyFFmpeg *ffmpeg, QObject *parent)
 	, m_ffmpeg(ffmpeg)
 {
 	connstate = true;
+	bindSinalSlot();
 }
 
 void RTSP_Player::SetPlayerUrl(QString playerUrl)
 {
 	this->m_playerUrl = playerUrl;
+}
+
+void RTSP_Player::bindSinalSlot()
+{
+	bool bl = connect(m_ffmpeg, SIGNAL(GetFramIsTimeOut()), this, SLOT(Slots_FramTimeout()));
 }
 
 void RTSP_Player::PlayerStart()
@@ -43,12 +49,8 @@ void RTSP_Player::PlayerStart()
 
 		if (m_ffmpeg->MyFFmpepReadFrame() < 0) {
 			qDebug("--------------- get frame fail, stop -----------");
-			break;
+			continue;
 		}
-// 		if (!connstate)
-// 		{
-// 			break;
-// 		}
 		QThread::msleep(10);
 	}
 
@@ -64,7 +66,7 @@ void RTSP_Player::PlayerStop()
 	m_stopped = true;
 }
 
-void RTSP_Player::upConnect(bool isConnect)
+void RTSP_Player::Slots_FramTimeout()
 {
-	//connstate = isConnect;
+	emit Sig_FramTimeOut();
 }

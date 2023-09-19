@@ -29,8 +29,8 @@ void ParsingCmd::tcpConnect(int index)
 	//m_tcpClient->m_ptrTcpObject->set_heart(const_cast<char*>(ss.c_str()), ss.length(), 1000);
 	std::string remoteIP = m_tcpClient->get_remoteIP();
 	QString strArg = "arp -d "+ QString::fromStdString(remoteIP);
-	 int exitCode = QProcess::execute(strArg);
-	 qDebug() << "process rst :" << exitCode;
+	int exitCode = QProcess::execute(strArg);
+	qDebug() << "process rst :" << exitCode;
 	m_tcpClient->connect();
 }
 
@@ -79,6 +79,8 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 		case CMD_PTZTEST:				str = RS_PtzMotor();				break;
 		case CMD_WIFISCANRESULT:		str = TS_WiFiScanResult();			break;
 		case CMD_RESET:					str = TS_ReSet();					break;
+		case CMD_FLASHVERIFY:			str = TS_FlashVerify();				break;
+		case CMD_MARQUEE:				str = TS_Marquee();					break;
 		default:
 			break;
 		}
@@ -98,6 +100,8 @@ void ParsingCmd::ParsCmd(uint32_t testname, uint32_t command, uint32_t value)
 		case CMD_VOIPKEYTEST:	str = RS_CallButton();				break;
 		case CMD_TFTEST:		str = RS_TFCard();					break;
 		case CMD_LDRTEST:		str = RS_Photosensitive();			break;
+		case CMD_FLASHVERIFY:	str = RS_FlashVerify();				break;
+		case CMD_MARQUEE:		str = RS_Marquee(value);			break;
 		//case CMD_PTZTEST:		str = RS_PtzMotor(value);			break;
 		default:
 			break;
@@ -196,20 +200,20 @@ void ParsingCmd::getMsg(int id, std::string& str, std::vector<boost::asio::ip::t
 	}
 	else if (4 == id)
 	{
-		m_stCommonInfo.itcpConn = false;				//TCP连接失败
+		m_stCommonInfo.itcpConn = false;												//TCP连接失败
 		r_str.append("已断开连接");
 		//if (GlobleVar::GetInstance()->m_iLogin)										//未登录
 		emit tcpConn(false, QString::fromLocal8Bit(r_str.c_str()));
 	}
 	else if (6 == id)
 	{
-		m_stCommonInfo.itcpConn = false;				//TCP连接失败
+		m_stCommonInfo.itcpConn = false;												//TCP连接失败
 // 		r_str.append("连接超时，正重连...");
 // 		m_tcpClient->connect();
 	}
 	else r_str.append(str);
 	
-	//emit updateConn(m_stCommonInfo.itcpConn);
+//	emit updateConn(m_stCommonInfo.itcpConn);
 	m_stCommonInfo.strconnect = r_str;
 }
 
@@ -627,6 +631,36 @@ std::string ParsingCmd::TS_PtzMotor()
 	return str;
 }
 
+std::string ParsingCmd::TS_FlashVerify()
+{
+	uint32_t command = A_TEST;
+	std::string testname = "flash_verify";
+	IM::Apacket apacket;
+	IM::Amessage *msg = new IM::Amessage();
+	msg->set_command(command);
+	msg->set_testname(testname);
+	apacket.set_allocated_msg(msg);
+
+	std::string str;
+	apacket.SerializeToString(&str);
+	return str;
+}
+
+std::string ParsingCmd::TS_Marquee()
+{
+	uint32_t command = A_TEST;
+	std::string testname = "marquee";
+	IM::Apacket apacket;
+	IM::Amessage *msg = new IM::Amessage();
+	msg->set_command(command);
+	msg->set_testname(testname);
+	apacket.set_allocated_msg(msg);
+
+	std::string str;
+	apacket.SerializeToString(&str);
+	return str;
+}
+
 std::string ParsingCmd::PTZ_UP()
 {
 	uint32_t command = A_TEST;
@@ -942,6 +976,22 @@ std::string ParsingCmd::RS_FullcolorVison(uint32_t value)
 	return str;
 }
 
+std::string ParsingCmd::RS_Marquee(uint32_t value)
+{
+	uint32_t command = A_RESULT;
+	std::string testname = "marquee";
+	uint32_t result = value;
+	IM::Apacket apacket;
+	IM::Amessage *msg = new IM::Amessage();
+	msg->set_command(command);
+	msg->set_testname(testname);
+	msg->set_result(result);
+	apacket.set_allocated_msg(msg);
+	std::string str;
+	apacket.SerializeToString(&str);
+	return str;
+}
+
 ///测试项回复IPC(自动)
 std::string ParsingCmd::RS_RestButton()
 {
@@ -985,6 +1035,20 @@ std::string ParsingCmd::RS_TFCard()
 	return str;
 }
 
+std::string ParsingCmd::RS_FlashVerify()
+{
+	uint32_t command = A_RESULT;
+	std::string testname = "flash_verify";
+	IM::Apacket apacket;
+	IM::Amessage *msg = new IM::Amessage();
+	msg->set_command(command);
+	msg->set_testname(testname);
+	apacket.set_allocated_msg(msg);
+	std::string str;
+	apacket.SerializeToString(&str);
+	return str;
+}
+
 std::string ParsingCmd::RS_Photosensitive()
 {
 	uint32_t command = A_RESULT;
@@ -999,26 +1063,6 @@ std::string ParsingCmd::RS_Photosensitive()
 	return str;
 }
 
-//PTZ马达测试
-// std::string ParsingCmd::RS_PtzMotor(uint32_t value)
-// {
-// 	if(value == Result_False){
-// 		emit manResult(QString::fromStdString("ptztest"), Result_False);
-// 		emit myResult("ptztest", Result_False);
-// 		return "";
-// 	}
-// 	uint32_t command = A_TEST;
-// 	std::string testname = "ptzatlogo";
-// 	IM::Apacket apacket;
-// 	IM::Amessage *msg = new IM::Amessage();
-// 	msg->set_command(command);
-// 	msg->set_testname(testname);
-// 	apacket.set_allocated_msg(msg);
-// 
-// 	std::string str;
-// 	apacket.SerializeToString(&str);
-// 	return str;
-// }
 std::string ParsingCmd::RS_PtzMotor()
 {
 	uint32_t command = A_TEST;
@@ -1069,58 +1113,30 @@ void ParsingCmd::Rec_GetInfo(IM::Apacket apacketinfo)
 //设置信息
 void ParsingCmd::Rec_SetInfo(IM::Apacket apacketinfo)
 {
-	if (apacketinfo.msg().testname() == "keywrite") {
-		IPC_RS_Keywrite(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "setdefault") {
-		IPC_RS_Setdefault(apacketinfo);
+	if (apacketinfo.msg().command() == A_OKAY) {
+		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 //手动测试
 void ParsingCmd::Rec_ManTest(IM::Apacket apacketinfo)
 {
-	if (apacketinfo.msg().testname() == "whitelight") {
-		IPC_RS_Whitelight(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "irlight") {
-		IPC_RS_Irlight(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "ircut") {
-		IPC_RS_Ircut(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "netled") {
-		IPC_RS_Netled(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "speakertest") {
-		IPC_RS_Speakertest(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "mictest") {
-		IPC_RS_Mictest(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "irnvtest") {
-		IPC_RS_Irnvtest(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "fullcolornv") {
-		IPC_RS_Fullcolornv(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "ptztest") {
-		IPC_RS_PTZTest(apacketinfo);
+	if (apacketinfo.msg().command() == A_OKAY) {
+		if (apacketinfo.msg().result() != 0) {
+			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
+		}
+		else {
+			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
+		}
 	}
 }
 //自动测试
 void ParsingCmd::Rec_AutoTest(IM::Apacket apacketinfo)
 {
-	if (apacketinfo.msg().testname() == "keytest") {
-		IPC_RS_Keytest(apacketinfo);
+	if (apacketinfo.msg().command() == A_OKAY) {
+		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
 	}
-	else if (apacketinfo.msg().testname() == "voipkeytest") {
-		IPC_RS_VoipKeytest(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "tftest") {
-		IPC_RS_TFtest(apacketinfo);
-	}
-	else if (apacketinfo.msg().testname() == "ldrtest") {
-		IPC_RS_Ldrtest(apacketinfo);
+	else if (apacketinfo.msg().command() == A_RESULT) {
+		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 
@@ -1307,172 +1323,6 @@ void ParsingCmd::IPC_RS_GetWiFiInfo(IM::Apacket apacketinfo)
 		QVariant DataVar;
 		DataVar.setValue(_map);
 		emit RsWiFiInfo(DataVar);
-	}
-}
-
-//设置
-void ParsingCmd::IPC_RS_Keywrite(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		uint32_t result = apacketinfo.msg().result();
-		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-	}
-}
-
-void ParsingCmd::IPC_RS_Setdefault(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		uint32_t result = apacketinfo.msg().result();
-		emit myResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-	}
-}
-//手动测试
-void ParsingCmd::IPC_RS_Whitelight(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Irlight(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Ircut(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Netled(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Speakertest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Mictest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Irnvtest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_Fullcolornv(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-void ParsingCmd::IPC_RS_PTZTest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		if (apacketinfo.msg().result() != 0) {
-			emit manResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-		}
-		else {
-			emit manTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-		}
-	}
-}
-
-//自动测试
-void ParsingCmd::IPC_RS_Keytest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()),apacketinfo.msg().timeout());
-	}
-	else if(apacketinfo.msg().command() == A_RESULT){
-		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-	}
-}
-
-void ParsingCmd::IPC_RS_VoipKeytest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-	}
-	else if (apacketinfo.msg().command() == A_RESULT) {
-		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-	}
-}
-
-void ParsingCmd::IPC_RS_TFtest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-	}
-	else if (apacketinfo.msg().command() == A_RESULT) {
-		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
-	}
-}
-
-void ParsingCmd::IPC_RS_Ldrtest(IM::Apacket apacketinfo)
-{
-	if (apacketinfo.msg().command() == A_OKAY) {
-		emit autoTimeout(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().timeout());
-	}
-	else if (apacketinfo.msg().command() == A_RESULT) {
-		emit autoResult(QString::fromStdString(apacketinfo.msg().testname()), apacketinfo.msg().result());
 	}
 }
 

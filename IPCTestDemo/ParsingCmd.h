@@ -73,6 +73,10 @@ private:
 	std::string TS_SetTestMode();
 	//PTZ马达测试
 	std::string TS_PtzMotor();
+	//flash数据校验
+	std::string TS_FlashVerify();
+	//测试跑马灯
+	std::string TS_Marquee();
 	//PTZ马达移动
 	std::string PTZ_UP();
 	std::string	PTZ_DOWN();
@@ -102,6 +106,8 @@ private:
 	std::string RS_InfraredVison(uint32_t value);
 	//测试全彩夜视
 	std::string RS_FullcolorVison(uint32_t value);
+	//测试跑马灯
+	std::string RS_Marquee(uint32_t value);
 ///测试项回复IPC(自动)
 	//测试Rest按键
 	std::string RS_RestButton();
@@ -109,6 +115,8 @@ private:
 	std::string RS_CallButton();
 	//测试TF卡
 	std::string RS_TFCard();
+	//flash数据校验
+	std::string RS_FlashVerify();
 	//测试光敏
 	std::string RS_Photosensitive();
 	//PTZ马达测试
@@ -133,24 +141,7 @@ private:
 	void IPC_SetLogo(QMap<QString, QString> map);
 	void IPC_RS_GetWiFiSite(IM::Apacket apacketinfo);
 	void IPC_RS_GetWiFiInfo(IM::Apacket apacketinfo);
-	//设置
-	void IPC_RS_Keywrite(IM::Apacket apacketinfo);
-	void IPC_RS_Setdefault(IM::Apacket apacketinfo);
-	//手动测试
-	void IPC_RS_Whitelight(IM::Apacket apacketinfo);
-	void IPC_RS_Irlight(IM::Apacket apacketinfo);
-	void IPC_RS_Ircut(IM::Apacket apacketinfo);
-	void IPC_RS_Netled(IM::Apacket apacketinfo);
-	void IPC_RS_Speakertest(IM::Apacket apacketinfo);
-	void IPC_RS_Mictest(IM::Apacket apacketinfo);
-	void IPC_RS_Irnvtest(IM::Apacket apacketinfo);
-	void IPC_RS_Fullcolornv(IM::Apacket apacketinfo);
-	void IPC_RS_PTZTest(IM::Apacket apacketinfo);
-	//自动测试
-	void IPC_RS_Keytest(IM::Apacket apacketinfo);
-	void IPC_RS_VoipKeytest(IM::Apacket apacketinfo);
-	void IPC_RS_TFtest(IM::Apacket apacketinfo);
-	void IPC_RS_Ldrtest(IM::Apacket apacketinfo);
+
 signals:
 	void updateConn(bool);						//TCP连接状态
 	void tcpConn(bool, QString);				//登录前，TCP连接, 用于登录界面显示连接成功与否

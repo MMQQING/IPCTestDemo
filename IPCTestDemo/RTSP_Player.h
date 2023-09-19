@@ -17,14 +17,16 @@ public:
 
 	explicit RTSP_Player(MyFFmpeg *ffmpeg = nullptr, QObject *parent = nullptr);
 	void SetPlayerUrl(QString playerUrl);
-
+private:
+	void bindSinalSlot();
 signals:
 	void SigOpenUrlResult(int result);
+	void Sig_FramTimeOut();
 
 public slots:
 	void PlayerStart();
 	void PlayerStop();
-	void upConnect(bool);
+	void Slots_FramTimeout();
 
 private:
 	volatile bool   m_stopped;				// 停止播放标识，为true时停止播放，退出播放循环

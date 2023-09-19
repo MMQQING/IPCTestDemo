@@ -29,11 +29,18 @@ private:
 	void getDeviceInfo();
 	void comparInfo(QMap<QString,QString> map);
 
-	QString errCode(QString str);
+	QString errCode(int);
 	QString toTestName(QString str);
+	QString toTestChnName(int);
 	void clearMesInfo();
 	void clearMesInfoNoCMEI();
 	void clearAllInfo();
+	void showInfo(bool, QString);
+	void NextTest();
+
+	void upToMES30();
+	void writeInfoReturn(int, int);
+
 protected:
 	//void keyPressEvent(QKeyEvent *);// ÷≥÷…®¬Î
 	void keyReleaseEvent(QKeyEvent *event) override;
@@ -58,20 +65,19 @@ private slots:
 	void switch_rtsp();
 	void on_pushButton_2_clicked();
 	void slots_testButton();
-	void slots_upButton();
 
 	void slots_isConnectIPC(bool, QString);
 
 	void slots_ManTest(QString testname, int revalue);
 	void slots_AutoTest(QString testname, int revalue);
-	void slots_NextTest();
 	void slots_upReturn(QString testname, int revalue);
+
+	void slot_fram_stop();
 
 	void deleteLater();
 signals:
 	void SigPlayStart();
 	void SigPlayStop();
-	void sigNextTest();
 	void sigChanggeIndex(int);
 	void sigOneImage(int, QImage);
 	void writeInfo(QVariant);
@@ -92,7 +98,7 @@ private:
 	QThread*				m_playThread = nullptr;
 	bool					IsConnectIPC;
 	QMap<QString, QLabel*>	_map;
-	QMap<QString, QString>	_mapResult;
+	QMap<int, QString>		_mapResult;
 	QList<QString>			_testlist;
 	QVector<QString>		_testvec;
 	ButtonEdit*				edit_CMEI;

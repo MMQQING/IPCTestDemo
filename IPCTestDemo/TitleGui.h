@@ -4,6 +4,7 @@
 #include "ui_TitleGui.h"
 #include "QRect"
 #include "QMouseEvent"
+#include "GlobleVar.h"
 
 #define WIN_WIDTH  1920
 #define WIN_HEIGHT  1032

@@ -7,6 +7,8 @@
 #include "circular_buffer.hpp"
 #include "condition_variable.hpp"
 
+//#define MES
+
 const QString  Normal = "#64A600";
 const QString  UNNormal = "#A23400";
 const QString  InitColor = "#535353";

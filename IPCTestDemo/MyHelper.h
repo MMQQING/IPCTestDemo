@@ -94,7 +94,7 @@ public:
         msg.setWindowTitle(tr("错误"));
         msg.setText(info);
         msg.setIcon(QMessageBox::Critical);
-        msg.addButton(tr("确定"),QMessageBox::ActionRole);
+        msg.addButton(tr(QString::fromLocal8Bit("确定").toLocal8Bit()),QMessageBox::ActionRole);
         msg.exec();
     }
 

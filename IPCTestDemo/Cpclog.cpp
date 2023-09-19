@@ -89,12 +89,22 @@ void CpcLogs::init_log(severity_levels console, severity_levels logs)
         sink->locked_backend()->scan_for_files();
         sink->set_formatter
             (
-            expr::format("[%1%_%2%] [%3%] {%4%}: %5%")
-      //      % expr::attr< attrs::current_thread_id::value_type >("ThreadID")
+#ifdef _DEBUG
+			expr::format("[%1%_%2%] [%3%] {%4%}: %5%")
+#else
+			expr::format("[%1%] [%3%] {%4%}: %5%")
+#endif // DEBUG
+				
+//			% expr::attr< attrs::current_thread_id::value_type >("ThreadID")
             % expr::format_date_time(_timestamp, "%Y-%m-%d,%H:%M:%S.%f")
             % expr::attr< boost::posix_time::time_duration >("Uptime")
 			% expr::attr< severity_levels >("Severity")
+#ifdef _DEBUG
 			% expr::format_named_scope(_scope, keywords::format = "%n[%f:%l]", keywords::depth = 1)
+#else
+			% expr::format_named_scope(_scope, keywords::format = "%f:%l", keywords::depth = 1)
+#endif // DEBUG
+			
 			% expr::smessage
             );
 		sink->set_filter(expr::attr< severity_levels >("Severity") <= logs);

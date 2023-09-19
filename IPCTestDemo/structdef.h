@@ -30,29 +30,32 @@ enum eProjectName
 //测试任务
 enum eCtrlCmd
 {
-	CMD_DEVIINFO = 0,		//获取设备信息
-	CMD_URL,				//获取直播播放地址
-	CMD_KEYREAD,			//读运营商信息
-	CMD_EXITTEST,			//退出厂测模式
-	CMD_SETTIME,			//设置时间
-	CMD_KEYWRITE,			//写运营商信息
-	CMD_SETDEFAULT,			//恢复出厂设置
-	CMD_WHITELIGHT,			//开关白光灯
-	CMD_IRLIGHT,			//开关红外灯
-	CMD_IRCUT,				//开关IRCUT
-	CMD_NETLED,				//开关网络LED
-	CMD_SPEAKERTEST,		//测试扬声器
-	CMD_MICTEST,			//测试麦克风
-	CMD_IRNVTEST,			//测试红外夜视
-	CMD_FULLCOLORNV,		//测试全彩夜视
-	CMD_KEYTEST,			//测试Rest按键
-	CMD_VOIPKEYTEST,		//测试通话按键
-	CMD_TFTEST,				//测试TF卡
-	CMD_LDRTEST,			//测试光敏
-	CMD_PTZTEST,			//PTZ马达测试
-	CMD_WIFISCANRESULT,		//获取WiFi站点测试
-	CMD_VIDEO,				//影像清晰度及脏点确认
-	CMD_RESET,				//批量升级模式退出
+	CMD_DEVIINFO = 0,					//获取设备信息
+	CMD_URL,							//获取直播播放地址
+	CMD_KEYREAD,						//读运营商信息
+	CMD_EXITTEST,						//退出厂测模式
+	CMD_SETTIME,						//设置时间
+	CMD_KEYWRITE,						//写运营商信息
+	CMD_SETDEFAULT,						//恢复出厂设置
+	CMD_WHITELIGHT,						//开关白光灯
+	CMD_IRLIGHT,						//开关红外灯
+	CMD_IRCUT,							//开关IRCUT
+	CMD_NETLED,							//开关网络LED
+	CMD_SPEAKERTEST,					//测试扬声器
+	CMD_MICTEST,						//测试麦克风
+	CMD_IRNVTEST,						//测试红外夜视
+	CMD_FULLCOLORNV,					//测试全彩夜视
+	CMD_KEYTEST,						//测试Rest按键
+	CMD_VOIPKEYTEST,					//测试通话按键
+	CMD_TFTEST,							//测试TF卡
+	CMD_LDRTEST,						//测试光敏
+	CMD_PTZTEST,						//PTZ马达测试
+	CMD_WIFISCANRESULT,					//WiFi测试
+	CMD_VIDEO,							//影像清晰度及脏点确认
+	CMD_RESET,							//批量升级模式退出
+	CMD_FLASHVERIFY,					//flash数据校验
+	CMD_MARQUEE,						//测试跑马灯
+	CMD_INFORMATION_COMPARISON,			//信息比对
 	CMD_COUNT
 };
 
@@ -60,7 +63,8 @@ const std::string strTcpCmd[] = {
 	"获取设备信息","获取直播播放地址","读运营商信息","退出厂测模式","设置时间","写运营商信息",
 	"恢复出厂设置","开关白光灯","开关红外灯","开关IRCUT","开关网络LED","测试扬声器",
 	"测试麦克风","测试红外夜视","测试全彩夜视","测试Rest按键","测试通话按键","测试TF卡","测试光敏",
-	"PTZ马达测试","获取WiFi站点测试","影像清晰度及脏点确认","批量升级模式退出"
+	"PTZ马达测试","WiFi测试","影像清晰度及脏点确认","批量升级模式退出","flash数据校验",
+	"测试跑马灯","信息比对"
 };
 //连接服务器状态
 enum eSerConnState
@@ -132,6 +136,7 @@ typedef struct st_common_info {
 	std::string		wifiPassWD;					//WiFi登录密码
 	int				SignalStrength;				//WiFi信号强度
 	std::string		firmwareVersion;			//固件版本
+	int				blMes20;                    //是否mes2.0
 	st_common_info() :itcpConn(0), iudpConn(0){};
 }st_common_info, *pst_common_info;
 

@@ -30,6 +30,9 @@ int GlobleVar::comparTestname(QString str)
 	else if (str.compare("exittest") == 0) {
 		return CMD_EXITTEST;
 	}
+	else if (str.compare("timewrite") == 0) {
+		return CMD_SETTIME;
+	}
 	else if (str.compare("keywrite") == 0) {
 		return CMD_KEYWRITE;
 	}
@@ -80,6 +83,15 @@ int GlobleVar::comparTestname(QString str)
 	}
 	else if (str.compare("video") == 0) {
 		return CMD_VIDEO;
+	}
+	else if (str.compare("reset") == 0) {
+		return CMD_RESET;
+	}
+	else if (str.compare("flash_verify") == 0) {
+		return CMD_FLASHVERIFY;
+	}
+	else if (str.compare("marquee") == 0) {
+		return CMD_MARQUEE;
 	}
 	else
 	{
@@ -148,6 +160,12 @@ QString GlobleVar::TestProjectName(QString str)
 	}
 	else if (str.compare("video") == 0) {
 		return QString::fromLocal8Bit("图像清晰度及脏点确认");
+	}
+	else if (str.compare("flash_verify") == 0) {
+		return QString::fromLocal8Bit("flash数据校验");
+	}
+	else if (str.compare("marquee") == 0) {
+		return QString::fromLocal8Bit("测试跑马灯");
 	}
 	else
 	{

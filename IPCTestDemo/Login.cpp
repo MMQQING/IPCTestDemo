@@ -112,7 +112,7 @@ void Login::getLocalIP()
 }
 
 void Login::login()
-{
+{	
 	this->hide();
 	if (nullptr == m_xb)
 		m_xb = std::make_shared<AddTestItemDialog>();
@@ -143,11 +143,24 @@ void Login::slot_advcfg()
 
 void Login::slot_login()
 {	
+#ifdef MES
 	if (!m_bMesConn)
 		//登录前自动进行网络连接，连接成功发送登录命令，否则不发送登录命令，提示用户修改网络地址进行测试
 		slot_test();
 	else
 		login();
+#else
+	//连接服务端TCP
+	std::shared_ptr<GlobleVar> ptr = GlobleVar::GetInstance();
+	ptr->m_stCommonInfo.strUsername = ui.objaccount->text().toStdString();
+	ptr->m_stCommonInfo.strPsw = ui.objpsw->text().toStdString();
+	ptr->m_stCommonInfo.iResCode = ui.objrescode->text().toStdString();
+	ptr->m_stCommonInfo.firmwareVersion = ui.objversion->text().toStdString();
+	ptr->m_stCommonInfo.strLocalIP = ui.objlocalip->currentText().toStdString();
+	ptr->m_stCommonInfo.strRemoteIP = ui.objServerip->text().toStdString();
+	QString ss(QString::fromLocal8Bit("登录成功"));
+	slot_mesConn(true, ss);
+#endif // MES	
 }
 
 void Login::slot_quit()
@@ -171,12 +184,6 @@ void Login::slot_test()
 		return;
 	m_ptrMes->common_login();
 
-	//测试使用
-// 	this->hide();
-// 	if (nullptr == m_xb)
-// 		m_xb = std::make_shared<AddTestItemDialog>();
-// 	m_xb->show();
-// 	m_xb->raise();
 	return;
 }
 

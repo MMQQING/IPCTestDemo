@@ -41,8 +41,8 @@ void XmlClass::ReadParaXml()
 	ptr->m_stCommonInfo.wifiPassWD = pt.get<std::string>("root.Wifi.wifi.<xmlattr>.wifipasswd", ""); 
 	ptr->m_stCommonInfo.SignalStrength = pt.get<int>("root.Wifi.wifi.<xmlattr>.dbm", 0);
 
-
-	ptr->m_stCommonInfo.iWebHostPort = pt.get<std::string>("root.webPara.web.<xmlattr>.hostport", "http://172.16.6.20:8069");	
+	ptr->m_stCommonInfo.iWebHostPort = pt.get<std::string>("root.webPara.web.<xmlattr>.hostport", "http://172.16.6.20:8069");
+	ptr->m_stCommonInfo.blMes20 = pt.get<int>("root.webPara.web.<xmlattr>.blMes20", 0);
 }
 
 void XmlClass::WriteParaXml()
@@ -69,6 +69,7 @@ void XmlClass::WriteParaXml()
 	pt.put<int>("root.Wifi.wifi.<xmlattr>.dbm", ptr->m_stCommonInfo.SignalStrength);
 
 	pt.put<std::string>("root.webPara.web.<xmlattr>.hostport", ptr->m_stCommonInfo.iWebHostPort);
+	pt.put<int>("root.webPara.web.<xmlattr>.blMes20", ptr->m_stCommonInfo.blMes20);
 
 	xml_writer_settings <std::string > settings('\t', 1);
 	write_xml(strfilename, pt, std::locale(), settings);
